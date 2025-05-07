@@ -1,0 +1,5 @@
+package teamsync;
+
+interface Schedule {
+    
+}
