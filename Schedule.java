@@ -1,3 +1,5 @@
-public class Schedule {
-    
+package teamsync
+
+interface Schedule {
+    Map 
 }
