@@ -8,6 +8,11 @@ public class dateTimePair {
     LocalDate date;
     LocalTime time;
     
+    /**
+     * constructs new dateTime pair
+     * @param date
+     * @param time
+     */
     public dateTimePair(LocalDate date, LocalTime time) {
         this.date = date;
         this.time = time;
@@ -58,7 +63,7 @@ public class dateTimePair {
      * @return String representation of the dateTimePair
      */
     public String toString() {
-        return "<" + date + "," + time + ">";
+        return "<" + date + ", " + time + ">";
     }
     
 
