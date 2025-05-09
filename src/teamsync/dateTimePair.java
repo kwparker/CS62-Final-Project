@@ -54,10 +54,12 @@ public class dateTimePair {
         return Objects.hash(this.date, this.time);  // hash date and time
     }
 
-
-
+    /**
+     * @return String representation of the dateTimePair
+     */
+    public String toString() {
+        return "<" + date + "," + time + ">";
+    }
     
-
-
 
 }
