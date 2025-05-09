@@ -3,6 +3,15 @@ import java.util.ArrayList;
 
 
 public class Schedule implements ScheduleInterface {
+
+    ArrayList<Event> schedule;
+    int numEvents;
+
+    public Schedule() {
+        schedule = new ArrayList<Event>();
+        numEvents = 0;
+    }
+
     // add an event to the schedule
     public void addEvent(Event event) {
 
