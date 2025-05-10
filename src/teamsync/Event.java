@@ -1,12 +1,13 @@
 package teamsync;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Event implements Comparable<Event> {
 
-    dateTimePair pair;  // dateTime pair of start time and date
+    dateTimePair startPair;  // dateTime pair of start time and date
     dateTimePair endPair; // end time of event
     String eventName;  // name of event
     int eventType;  // 1 is academic-related, 2 is athletic-related, 3 is other
@@ -15,12 +16,13 @@ public class Event implements Comparable<Event> {
 
     /**
      * constructs new event
-     * @param pair of date and time of event
+     * @param startPair of start date and time of event
+     * @param endPair of end date and time of event
      * @param eventName name of event
      * @param eventType indicates if event is academic, athletics, or other
      */
-    public Event (dateTimePair pair, dateTimePair endPair, String eventName, int eventType, String info) {
-        this.pair = pair;
+    public Event (dateTimePair startPair, dateTimePair endPair, String eventName, int eventType, String info) {
+        this.startPair = startPair;
         this.endPair = endPair;
         this.eventName = eventName;
         this.info = info;
@@ -34,13 +36,25 @@ public class Event implements Comparable<Event> {
         }
     }
 
+    // detect overlap between two events
+    public boolean detectOverlap(Event event){
+        boolean sameDay = this.startPair.date.equals(event.startPair.date); // check if events are on the same day
+        
+        // in order to have overlap, one event must start before the other ends
+        boolean thisStartsBeforeOtherEnds = this.startPair.time.compareTo(event.endPair.time) < 0;
+        boolean otherStartsBeforeThisEnds = event.startPair.time.compareTo(this.endPair.time) < 0;
+    
+        return sameDay && thisStartsBeforeOtherEnds && otherStartsBeforeThisEnds;
+    }
+
+
     public int compareTo(Event otherEvent) {
-        return this.pair.compareTo(otherEvent.pair);  // uses dateTimePair compare method to indicate which event comes first
+        return this.startPair.compareTo(otherEvent.startPair);  // uses dateTimePair compare method to indicate which event comes first
     }
 
     public String toString() {
         StringBuilder output = new StringBuilder();
-        output.append("<" + this.pair.toString() + ", " + eventName + ", ");
+        output.append("<" + this.startPair.toString() + "-" + this.endPair.toString() + ", " + eventName + ", ");
         if (this.eventType == 1) {
             output.append("academic (1)");
         } else if (this.eventType == 2) {
@@ -51,6 +65,4 @@ public class Event implements Comparable<Event> {
         return output.toString();
     }
 
-
-    
 }

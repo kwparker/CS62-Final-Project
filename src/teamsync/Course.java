@@ -126,14 +126,12 @@ public class Course {
     }
 
 
-
     public String toString() {
         return "Course ID: " + courseSectionId +
                ", Time: " + classBeginningTime + "-" + classEndingTime +
                ", Days: " + classMeetingDays +
                ", Location: " + room;
     }
-
 
 
 

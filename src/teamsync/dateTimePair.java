@@ -52,6 +52,7 @@ public class dateTimePair {
         }
     }
 
+    
     /**
      * @return hashcode of dateTimePair
      */
@@ -65,7 +66,6 @@ public class dateTimePair {
     public String toString() {
         return "<" + date + ", " + time + ">";
     }
-    
     
     
 }
