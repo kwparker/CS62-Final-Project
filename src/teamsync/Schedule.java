@@ -1,5 +1,7 @@
 package teamsync;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 
 public class Schedule implements ScheduleInterface {
@@ -14,6 +16,7 @@ public class Schedule implements ScheduleInterface {
 
     // add an event to the schedule
     public void addEvent(Event event) {
+
 
     }
 
@@ -50,5 +53,10 @@ public class Schedule implements ScheduleInterface {
     // clear the whole schedule
     public void clearSchedule() {
 
+    }
+
+    // sorts schdule based on time/date
+    public void sortSchedule() {
+        Collections.sort(schedule);
     }
 }

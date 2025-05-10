@@ -1,13 +1,16 @@
 package teamsync;
 
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-public class Event {
+public class Event implements Comparable<Event> {
 
-    dateTimePair pair;  // dateTime pair
+    dateTimePair pair;  // dateTime pair of start time and date
+    dateTimePair endPair; // end time of event
     String eventName;  // name of event
     int eventType;  // 1 is academic-related, 2 is athletic-related, 3 is other
+    String info;
     static final List<Integer> EVENT_TYPES = Arrays.asList(1,2,3);  // options for eventType
 
     /**
@@ -16,9 +19,12 @@ public class Event {
      * @param eventName name of event
      * @param eventType indicates if event is academic, athletics, or other
      */
-    public Event (dateTimePair pair, String eventName, int eventType) {
+    public Event (dateTimePair pair, dateTimePair endPair, String eventName, int eventType, String info) {
         this.pair = pair;
+        this.endPair = endPair;
         this.eventName = eventName;
+        this.info = info;
+        
         
 
         if (EVENT_TYPES.contains(eventType)) {  // if type of event is valid
