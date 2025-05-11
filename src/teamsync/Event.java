@@ -54,14 +54,15 @@ public class Event implements Comparable<Event> {
 
     public String toString() {
         StringBuilder output = new StringBuilder();
-        output.append("<" + this.startPair.toString() + "-" + this.endPair.toString() + ", " + eventName + ", ");
+        output.append(this.startPair.toString() + " - " + this.endPair.toString() + ", " + eventName + " (");
         if (this.eventType == 1) {
-            output.append("academic (1)");
+            output.append("Academic);");
         } else if (this.eventType == 2) {
-            output.append("athletic (2)");
+            output.append("Athletic);");
         } else {
-            output.append("other (3)");
+            output.append("Other);");
         }
+
         return output.toString();
     }
 

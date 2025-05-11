@@ -133,4 +133,13 @@ public class Schedule implements ScheduleInterface {
         return null; // no upcoming events
     }
 
+    public String toString() {
+        StringBuilder output = new StringBuilder();
+        for (Event event: schedule) {
+            output.append(event.toString() + "\n");
+        }
+        
+        return output.toString();
+    }
+
 }
