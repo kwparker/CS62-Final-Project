@@ -14,8 +14,8 @@ public class Coach {
     HashMap<String, Athlete> athletes;
 
     public Coach(String name, String username, String team, Schedule schedule, HashMap<String, Athlete> athletes){
-        this.team = team;
         this.name = name;
+        this.team = team;
         this.username = username;
         this.schedule = schedule;
         this.athletes = athletes;
@@ -72,43 +72,76 @@ public class Coach {
         return schedule.getConflicts();
     }
 
-    // add an event to everyone's schedule
-    public void addEventToTeam(Event event) {
+    // add an event to every athlete's schedule
+    public void addEventToAllAthletes(Event event) {
+        for (String user: athletes.keySet()) {  // for every username in the 
+            Athlete athlete = athletes.get(user);
+            athlete.addEvent(event);
+        }
 
+    }
+
+    // want to add event to all athletes and add event to coach's schedule 
+    public void addEventToTeam(Event event) {  // this might not be right
+        addEventToAllAthletes(event);
+        addEvent(event);
     }
 
     // add an event to an athlete's schedule
     public void addEventToAthlete(Event event, String username) {
-
+        athletes.get(username).addEvent(event);
     }
 
     // get a particular athlete's schedule
     public Schedule getAthleteSchedule(String username) {
-        return null;
+        return athletes.get(username).schedule;
     }
 
     // get all athletes
-    public Collection<Athlete> getAllAthletes() {
-        return null;
+    public ArrayList<Athlete> getAllAthletes() {  // is it fine for this to be an arrayList of athlete objects?
+        ArrayList<Athlete> athleteList = new ArrayList<Athlete>();
+        for (String user: athletes.keySet()) {
+            athleteList.add(athletes.get(user));
+        } 
+        return athleteList;
     }
 
     // remove athlete from team
-    public Athlete removeAthlete(String username) {  // could also return null probably
-        return null;
+    public void removeAthlete(String username) {  // do we want this method to be void?
+        athletes.remove(username);
     }
 
     // get all athletes' conflicts
     public HashMap<String, ArrayList<ArrayList<Event>>> getAllConflicts() {  // hashmap that takes username of athlete and maps that to their conflicts
-        return null;
+        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = new HashMap<String, ArrayList<ArrayList<Event>>>();
+        for (String user: athletes.keySet()) {
+            Athlete athlete = athletes.get(user);
+            if (athlete.hasConflicts()) {
+                conflictMap.put(user, athlete.getAthleteConflicts());
+            }
+        }
+
+        return conflictMap;
     }
 
     // get a particular athlete's conflicts
-    public ArrayList<ArrayList<Event>> getAthleteConflicts() {
-        return null;
+    public ArrayList<ArrayList<Event>> getAthleteConflicts(String username) {
+        return athletes.get(username).getAthleteConflicts();
     }
 
-    public String toString() {
-        return null;
+
+    @Override
+    public String toString(){
+        StringBuilder output = new StringBuilder();
+        output.append("\n\nCoach: " + name + "\nTeam: " + team + "\n: " + major + "\nSchedule:\n" + schedule + "\nAthletes:\n");
+        for (String user: athletes.keySet()) {
+            output.append(athletes.get(user).simpleToString());
+        }
+        return output.toString();
+    }
+
+    public static void main(String[] args) {
+        
     }
 
 }

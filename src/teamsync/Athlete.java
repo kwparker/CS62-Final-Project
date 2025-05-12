@@ -11,13 +11,15 @@ public class Athlete {
     String username;
     String major;
     Schedule schedule;
+    int gradYear;
     
-    public Athlete(String name, String username, String team, String major, Schedule schedule){
+    public Athlete(String name, String username, String team, String major, Schedule schedule, int gradYear){
         this.team = team;
         this.name = name;
         this.username = username;    
         this.major = major;
         this.schedule = schedule;
+        this.gradYear = gradYear;
     }
 
     public String getName() {
@@ -94,9 +96,13 @@ public class Athlete {
         }
     }
 
+    public String simpleToString() {
+        return "\n\nAthlete: " + name + "\nGrad Year: " + gradYear;
+    }
+
     @Override
     public String toString(){
-        return "\n\nAthlete: " + name + "\nTeam: " + team + "\nMajor: " + major + "\nSchedule:\n" + schedule;
+        return "\n\nAthlete: " + name + "\nTeam: " + team + "\nMajor: " + major + "\nGrad Year: " + gradYear + "\nSchedule:\n" + schedule;
     }
 
     public static void main(String[] args) { // testing toString
@@ -104,9 +110,9 @@ public class Athlete {
         Schedule schedule2 = new Schedule();
         Schedule schedule3 = new Schedule();
         
-        Athlete athlete = new Athlete("Guy", "guy123", "Soccer", "CS", schedule1);
-        Athlete athlete2 = new Athlete("Kai", "kai456", "Swim", "CS", schedule2);
-        Athlete athlete3 = new Athlete("Tiernan", "tiernan789", "XC", "Math", schedule3);
+        Athlete athlete = new Athlete("Guy", "guy123", "Soccer", "CS", schedule1, 2027);
+        Athlete athlete2 = new Athlete("Kai", "kai456", "Swim", "CS", schedule2, 2027);
+        Athlete athlete3 = new Athlete("Tiernan", "tiernan789", "XC", "Math", schedule3, 2027);
 
         // create guy's schedule
         Event classEvent = new Event(
