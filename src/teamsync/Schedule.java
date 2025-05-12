@@ -41,7 +41,7 @@ public class Schedule implements ScheduleInterface {
     }
 
 
-    public ArrayList<ArrayList<Event>> getConflicts() {
+    public ArrayList<ArrayList<Event>> getConflicts() {  // how will this method work if there are 3 events that all conflict with each other?
         sortSchedule(); // sort schedule
         ArrayList<ArrayList<Event>> conflicts = new ArrayList<>();
     

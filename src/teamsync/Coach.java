@@ -146,55 +146,55 @@ public class Coach {
         // Create schedules
         Schedule schedule1 = new Schedule();
         Schedule schedule2 = new Schedule();
+        Schedule schedule3 = new Schedule();
     
         // Create athletes
-        Athlete a1 = new Athlete("Alex", "alex123", "Swim", "Biology", schedule1, 2026);
-        Athlete a2 = new Athlete("Jamie", "jamie456", "Swim", "Math", schedule2, 2025);
+        Athlete athlete1 = new Athlete("Tiernan", "tiernan123", "Swim", "Math", schedule1, 2026);
+        Athlete athlete2 = new Athlete("Guy", "guy123", "Swim", "Physics", schedule2, 2025);
     
-        // Map of athletes
+        // Create map of athletes
         HashMap<String, Athlete> athleteMap = new HashMap<>();
-        athleteMap.put(a1.getUserName(), a1);
-        athleteMap.put(a2.getUserName(), a2);
+        athleteMap.put(athlete1.getUserName(), athlete1);
+        athleteMap.put(athlete2.getUserName(), athlete2);
     
         // Create coach
-        Coach coach = new Coach("Coach Kelly", "coachK", "Swim", new Schedule(), athleteMap);
+        Coach coach = new Coach("Coach Gowdy", "coachJPG", "Swim", schedule3, athleteMap);
     
-        // Create a team event
-        Event practice = new Event(
-            new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(15, 0)),
+        // Create an event to add to whole team
+        Event practice = new Event( new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(15, 0)),
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(17, 0)),
-            "Swim Practice", 2, "Pool"
+            "Swim Practice", 2, "Haldeman Pool"
         );
     
         // Add event to all athletes + coach
         coach.addEventToTeam(practice);
     
-        // Add a conflicting event for Jamie
+        // Add a conflicting event for Guy
         Event conflict = new Event(
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(16, 30)),
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(18, 0)),
-            "Math Seminar", 1, "Lecture Hall"
+            "Math Class", 1, "Estella Laboratory"
         );
-        coach.addEventToAthlete(conflict, "jamie456");
+        coach.addEventToAthlete(conflict, "guy123");
     
         // Print out schedules and conflicts
-        System.out.println("\n== Coach Info ==");
+        System.out.println("\n Coach Info ");
         System.out.println(coach);
     
-        System.out.println("\n== Athlete Schedules ==");
+        System.out.println("\n Athlete Schedules ");
         for (Athlete a : coach.getAllAthletes()) {
             System.out.println(a);
             a.printConflicts();
         }
     
         // Print all conflicts
-        System.out.println("\n== All Conflicts ==");
+        System.out.println("\n All Conflicts ");
         HashMap<String, ArrayList<ArrayList<Event>>> allConflicts = coach.getAllConflicts();
         for (String user : allConflicts.keySet()) {
             System.out.println("Conflicts for " + user + ":");
             for (ArrayList<Event> conflictPair : allConflicts.get(user)) {
-                for (Event e : conflictPair) {
-                    System.out.println("\t" + e);
+                for (Event event : conflictPair) {
+                    System.out.println(event);
                 }
             }
         }
