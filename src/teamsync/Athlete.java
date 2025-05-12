@@ -27,6 +27,14 @@ public class Athlete {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public String getUserName() {
+        return username;
+    }
+
+    public void setUserName(String username) {
+        this.username = username;
+    }
 
     public String getTeam() {
         return team;
