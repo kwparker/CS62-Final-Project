@@ -56,7 +56,7 @@ public class TeamSyncApp {
                 System.out.println(coach.getCoachSchedule());
                 break;
             } else if (userChoice.equals("2")) {
-                Event event = eventFromInput();
+                Event event = eventFromInput();  // create this method
                 coach.addEventToTeam(event);
                 System.out.println("Event added to athletes and coach.");
             } else if (userChoice.equals("3")) {
@@ -64,7 +64,9 @@ public class TeamSyncApp {
                 String user = scannerIn.nextLine();
                 coach.getAthleteSchedule(user);
             } else if (userChoice.equals("4")) {
-                
+                for (Athlete athlete: coach.getAllAthletes()) {
+                    athlete.printConflicts();
+                } break;
             } else if (userChoice.equals("5")) {
                 
             } else if (userChoice.equals("6")) {
