@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Coach {
     
@@ -50,12 +51,29 @@ public class Coach {
         return schedule;
     }
 
-    public void addEvent(Event event) {
+    public void addEventToCoach(Event event) {
         schedule.addEvent(event);
     }
 
     public Event removeEvent(Event event) {
         return schedule.removeEvent(event);
+    }
+
+    public void removeEventFromAthletes(Event event) {
+        for (String user: athletes.keySet()) {
+            Athlete athlete = athletes.get(user);
+            athlete.removeEvent(event);
+        }
+    }
+
+    public void removeEventFromAthlete(Event event, String user) {
+        Athlete athlete = athletes.get(user);
+        athlete.removeEvent(event);
+    }
+
+    public void removeEventFromTeam(Event event) {
+        removeEventFromAthletes(event);
+        removeEvent(event);
     }
 
     
@@ -79,13 +97,12 @@ public class Coach {
             Athlete athlete = athletes.get(user);
             athlete.addEvent(event);
         }
-
     }
 
     // want to add event to all athletes and add event to coach's schedule 
     public void addEventToTeam(Event event) {  // this might not be right
         addEventToAllAthletes(event);
-        addEvent(event);
+        addEventToCoach(event);
     }
 
     // add an event to an athlete's schedule
@@ -128,6 +145,10 @@ public class Coach {
     // get a particular athlete's conflicts
     public ArrayList<ArrayList<Event>> getAthleteConflicts(String username) {
         return athletes.get(username).getAthleteConflicts();
+    }
+
+    public Set<String> getAthletesWithConflicts() {
+        return getAllConflicts().keySet();
     }
 
 
@@ -178,17 +199,17 @@ public class Coach {
         coach.addEventToAthlete(conflict, "guy123");
     
         // Print out schedules and conflicts
-        System.out.println("\n Coach Info ");
+        System.out.println("\nCoach Info ");
         System.out.println(coach);
     
-        System.out.println("\n Athlete Schedules ");
+        System.out.println("\nAthlete Schedules ");
         for (Athlete a : coach.getAllAthletes()) {
             System.out.println(a);
             a.printConflicts();
         }
     
         // Print all conflicts
-        System.out.println("\n All Conflicts ");
+        System.out.println("\nAll Conflicts ");
         HashMap<String, ArrayList<ArrayList<Event>>> allConflicts = coach.getAllConflicts();
         for (String user : allConflicts.keySet()) {
             System.out.println("Conflicts for " + user + ":");
