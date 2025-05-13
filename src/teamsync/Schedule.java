@@ -65,6 +65,7 @@ public class Schedule implements ScheduleInterface {
         return conflicts;
     }
 
+
     // detect conflicts within schedule 
     public boolean detectConflict() {
         return !getConflicts().isEmpty();

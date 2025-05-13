@@ -5,14 +5,17 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.time.format.DateTimeFormatter;
 
 // Puts the data from the course section schedule json into an arraylist and creates methods that converts a course to an event
 
 public class Course {
+    
     String courseSectionId;
     String classBeginningTime;
     String classEndingTime;
@@ -37,16 +40,21 @@ public class Course {
         this.courseSectionId = courseSectionId; 
         }
 
-    public String getClassBeginningTime(){
-        return classBeginningTime;
+    public LocalTime getClassBeginningTime(){
+
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HHmm");
+        LocalTime time = LocalTime.parse(classBeginningTime, format);
+        return time;
     }
 
     public void setClassBeginningTime(String classBeginningTime){
         this.classBeginningTime = classBeginningTime;
     }
 
-    public String getClassEndingTime(){
-        return classEndingTime;
+    public LocalTime getClassEndingTime(){
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HHmm");
+        LocalTime time = LocalTime.parse(classEndingTime, format);
+        return time;
     }
 
     public void setClassEndingTime(String classEndingTime){
@@ -74,7 +82,7 @@ public class Course {
        
         int colonIndex = line.indexOf(':');
         String value = line.substring(colonIndex + 1).trim();
-        value = value.replace(",", ""); 
+        value = value.replace(",", "");
         value = value.replace("\"", "");
         return value;
     }
@@ -123,6 +131,76 @@ public class Course {
         }
 
         return dates;
+    }
+
+    // collects all the dates, creates an arraylist of event that correspond to the days that the course happens in fall of 2024
+    public ArrayList<Event> courseToEvent(){
+
+        ArrayList<Event> courseEvents = new ArrayList<>();
+        ArrayList<LocalDate> dates = this.generateDates(); // generates dates for this course 
+
+        for (LocalDate day : dates){ // goes through all the dates 
+            dateTimePair startPair = new dateTimePair(day, this.getClassBeginningTime());
+            dateTimePair endPair = new dateTimePair(day, this.getClassEndingTime());
+
+            Event eventInstance = new Event(startPair, endPair, courseSectionId, 1, room);
+
+            courseEvents.add(eventInstance);
+        }
+    
+         return courseEvents;
+
+    }
+
+    // filter by department, then it will go through the 10 cs classes at pomona for example, then loop through those 10 classes,
+    // and then check each one of those classes to see if they have a confliction/overlap, if they DO NOT have one then
+    // print those to show them as they are the ones that are in the major department and have no overlap and fit in the schedule
+    public static ArrayList<Course> filterByDept(String deptPrefix) {
+        ArrayList<Course> filtered = new ArrayList();
+        for (Course course: allCourses){
+            if (course.getCourseSectionId().startsWith(deptPrefix)){
+                filtered.add(course);
+            }
+        }
+        return filtered;
+    }
+    
+    // filter by current schedule, taks in a schedule as the parameter, and will return an arraylist of any course that does not 
+    // conflict with any event in the inputted schedule
+    public static ArrayList<Course> filterBySchedule(Schedule schedule) {
+        ArrayList<Course> nonConflicting = new ArrayList<>();
+        for (Course course: allCourses){
+            boolean hasConflict = false;
+            
+            for (Event courseEvent: course.courseToEvent()){
+
+                for (Event scheduledEvent: schedule.getSchedule()){
+
+                    if (courseEvent.detectOverlap(scheduledEvent)) {
+                        hasConflict = true;
+                        break;
+                }
+            }
+            if (hasConflict){
+                break;
+            }  
+        }
+        if (!hasConflict){
+            nonConflicting.add(course);
+        }  
+     }
+     
+     return nonConflicting;
+
+    }  
+
+    // filter by both 
+    public static ArrayList<Course> filterByBoth(String deptPrefix, Schedule schedule) {
+        ArrayList<Course> filteredCourses = new ArrayList<Course>();
+        filteredCourses.addAll(filterByDept(deptPrefix));
+        filteredCourses.addAll(filterBySchedule(schedule));
+        return filteredCourses;
+        
     }
 
 

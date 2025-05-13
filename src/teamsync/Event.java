@@ -3,7 +3,7 @@ package teamsync;
 import java.util.Arrays;
 import java.util.List;
 
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event> { // since when was this a comparable?
 
     dateTimePair startPair;  // dateTime pair of start time and date
     dateTimePair endPair; // end time of event

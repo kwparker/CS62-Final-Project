@@ -166,6 +166,19 @@ public class Coach {
         schedule.clearSchedule();
     }
 
+    public ArrayList<Athlete> filterByYear(int year) {
+        ArrayList<Athlete> athletesYear = new ArrayList<Athlete>();
+        for (String user: athletes.keySet()) {
+            int gradYear = (athletes.get(user)).gradYear;
+            if (gradYear == year) {
+                athletesYear.add(athletes.get(user));
+            }
+        }
+
+        return athletesYear;
+
+    }
+
 
     @Override
     public String toString(){
@@ -206,12 +219,12 @@ public class Coach {
         coach.addEventToTeam(practice);
     
         // Add a conflicting event for Guy
-        Event math_class = new Event(
+        Event meeting = new Event(
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(16, 30)),
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(18, 0)),
-            "Math Class", 1, "Estella Laboratory"
+            "Meeting", 1, "Coach's Office"
         );
-        coach.addEventToAthlete(math_class, "guy123");
+        coach.addEventToAthlete(meeting, "guy123");
     
         // Print out schedules and conflicts
         System.out.println("\nCoach Info ");
