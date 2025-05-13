@@ -97,8 +97,13 @@ public class Team {
         return coach.getAthleteConflicts(user);
     }
 
-    public Set<String> getAthletesWithConflicts() {  // should we return a set or convert to an ArrayList
+    public ArrayList<String> getAthletesWithConflicts() {  // should we return a set or convert to an ArrayList
         return coach.getAthletesWithConflicts();
+        
+    }
+
+    public int teamSize() {
+        return 1 + this.athleteList.size();
     }
     
 

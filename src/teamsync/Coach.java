@@ -146,8 +146,21 @@ public class Coach {
         return athletes.get(username).getAthleteConflicts();
     }
 
-    public Set<String> getAthletesWithConflicts() {
-        return getAllConflicts().keySet();
+    public ArrayList<String> getAthletesWithConflicts() {
+        ArrayList<Athlete> conflictList = new ArrayList<Athlete>();
+        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = getAllConflicts();
+
+        for (String user: conflictMap.keySet()) {
+            conflictList.add(athletes.get(user));
+        }
+       
+        ArrayList<String> userList = new ArrayList<String>();
+        
+        for (Athlete athlete: conflictList) {
+            userList.add(athlete.username);
+        }
+        
+        return userList;
     }
 
 
