@@ -206,12 +206,12 @@ public class Coach {
         coach.addEventToTeam(practice);
     
         // Add a conflicting event for Guy
-        Event conflict = new Event(
+        Event math_class = new Event(
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(16, 30)),
             new dateTimePair(LocalDate.of(2024, 9, 4), LocalTime.of(18, 0)),
             "Math Class", 1, "Estella Laboratory"
         );
-        coach.addEventToAthlete(conflict, "guy123");
+        coach.addEventToAthlete(math_class, "guy123");
     
         // Print out schedules and conflicts
         System.out.println("\nCoach Info ");
