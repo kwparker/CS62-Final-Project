@@ -87,6 +87,7 @@ public class Schedule implements ScheduleInterface {
     // clear the whole schedule
     public void clearSchedule() {
         schedule.clear();
+        
     }
 
     // sorts schdule based on time/date

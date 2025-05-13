@@ -96,6 +96,10 @@ public class Athlete {
         }
     }
 
+    public void clearAthleteSched() {
+        schedule.clearSchedule();
+    }
+
     public String simpleToString() {
         return "\n\nAthlete: " + name + "\nGrad Year: " + gradYear;
     }

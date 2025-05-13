@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Coach {
     
@@ -161,6 +160,10 @@ public class Coach {
         }
         
         return userList;
+    }
+
+    public void clearCoachSched() {
+        schedule.clearSchedule();
     }
 
 

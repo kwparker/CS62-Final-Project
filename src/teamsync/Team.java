@@ -2,7 +2,6 @@ package teamsync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 // combine coach and their athletes into the same arrayList
 // DIFFERENT CLASS maybe school/college? : hashmap where buckets are the teams, like soccer, swim, track, etc. 
@@ -105,6 +104,34 @@ public class Team {
     public int teamSize() {
         return 1 + this.athleteList.size();
     }
+
+    public ArrayList<String> getAllAthletesUsernames() {
+        ArrayList<String> userList = new ArrayList<String>();
+
+        for (Athlete athlete: athleteList) {
+            userList.add(athlete.username);
+        }
+
+        return userList;
+    }
+
+    public String getCoachUsername() {
+        return coach.username;
+    }
     
+    // is this gonna properly update schedules?
+    public void clearSchedules() {
+        coach.clearCoachSched();
+
+        for (Athlete athlete: athleteList) {
+            athlete.clearAthleteSched();
+        }
+    }
+
+    public void addPracticeSchedule(Schedule practiceSchedule) {
+        for (Event event: practiceSchedule.getSchedule()) {
+            this.addEventToTeam(event);
+        }
+    }
 
 } 
