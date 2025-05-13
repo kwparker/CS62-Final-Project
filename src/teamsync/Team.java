@@ -65,6 +65,16 @@ public class Team {
         return athleteMap.get(user);
     }
 
+    public void addAthlete(Athlete athlete, String user) {
+        this.athleteList.add(athlete);
+        this.athleteMap.put(user, athlete);
+    }
+
+    public void removeAthlete(Athlete athlete, String user) {
+        this.athleteList.remove(athlete);
+        this.athleteMap.remove(user);
+    }
+
     public void addEventToTeam(Event event) {  // is this chill
         coach.addEventToTeam(event);
     }
