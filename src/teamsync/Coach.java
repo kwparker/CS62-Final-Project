@@ -1,9 +1,14 @@
 package teamsync;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Coach {
     
@@ -179,6 +184,71 @@ public class Coach {
 
     }
 
+    // assumes startDate and endDate in the form 2025-05-13, year-month-day
+    // assume that the start date and end date are valid for fall 2024
+    // this method take a file path that contains a weekly scedule of athletic practices/games/etc, a start date, end date, and creates an arralist of events which covers
+    // the time interval with the weekly pratice schedule - this maps a weekly athletic schedule to a time interval, likely the fall 2024 semester 
+    public ArrayList<Event> createPracticeScedule(String filepath, String startDate, String endDate){
+
+        ArrayList<Event> practiceSchedule = new ArrayList<>();
+
+        LocalDate start = LocalDate.parse(startDate); 
+        LocalDate end = LocalDate.parse(endDate); 
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            
+
+            int linectr = 0;
+
+            while ((line = br.readLine()) != null) {
+                if (linectr != 0){
+
+                        String[] row = line.split(",");
+                        
+                        String eventName = row[0].trim();
+                        String dayOfWeekSt = row[1].trim();
+
+                        DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekSt.toUpperCase());
+
+
+                        String startTimeSt = row[2].trim();
+
+                        LocalTime startTime = LocalTime.parse(startTimeSt);
+
+                        String endTimeSt = row[3].trim();
+
+                        LocalTime endTime = LocalTime.parse(endTimeSt);
+
+                        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) { // goes through all the days in date interval
+                            if (date.getDayOfWeek().equals(dayOfWeek)){
+
+                                dateTimePair startPair = new dateTimePair(date, startTime);
+                                dateTimePair endPair = new dateTimePair(date, endTime);
+
+
+                                Event athleticEvent = new Event(startPair, endPair, eventName, 2, "");
+
+                                practiceSchedule.add(athleticEvent); // adds the date
+
+                                }
+                              
+                        }
+
+                    }
+
+                linectr +=1;
+                
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return practiceSchedule;
+    }
+        
+
+
 
     @Override
     public String toString(){
@@ -191,6 +261,7 @@ public class Coach {
     }
 
     public static void main(String[] args) {
+
         
         // Create schedules
         Schedule schedule1 = new Schedule();
@@ -200,6 +271,8 @@ public class Coach {
         // Create athletes
         Athlete athlete1 = new Athlete("Tiernan", "tiernan123", "Swim", "Math", schedule1, 2026);
         Athlete athlete2 = new Athlete("Guy", "guy123", "Swim", "Physics", schedule2, 2025);
+
+
     
         // Create map of athletes
         HashMap<String, Athlete> athleteMap = new HashMap<>();
@@ -247,8 +320,13 @@ public class Coach {
                 }
             }
         }
+
+        // prints the arrylist with the events for the time interval
+        //System.out.println(coach.createPracticeScedule("Data/SoccerSampleSchedule.csv", "2024-09-11", "2024-11-01"));
+        
         
         
     }
+
 
 }
