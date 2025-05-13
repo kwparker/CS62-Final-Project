@@ -134,4 +134,8 @@ public class Team {
         }
     }
 
+    public String toString() {
+        return null;
+    }
+
 } 
