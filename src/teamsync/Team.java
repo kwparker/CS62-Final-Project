@@ -1,9 +1,7 @@
 package teamsync;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 // combine coach and their athletes into the same arrayList
