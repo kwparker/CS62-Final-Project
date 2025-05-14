@@ -68,15 +68,28 @@ public class TeamSyncApp {
                     athlete.printConflicts();
                 } break;
             } else if (userChoice.equals("5")) {
+                System.out.println("Input practice schedule file path");
+                String fileName = scannerIn.nextLine();
+                while (true) {
+                    System.out.println("Practice start date in form YYYY-MM-DD");
+                    String startDate = scannerIn.nextLine();
+                    
+
+                }
+                
                 
             } else if (userChoice.equals("6")) {
                 
             } else if (userChoice.equals("7")) {
                 
             } else {
-                System.out.println("Invalid input. Please choice a number b/w 1 and 7.")
+                System.out.println("Invalid input. Please choice a number b/w 1 and 7.");
             }
 
+    }
+
+    public Event eventFromInput() {
+        return null;
     }
 }
  

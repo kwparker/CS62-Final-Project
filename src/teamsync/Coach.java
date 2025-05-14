@@ -198,11 +198,10 @@ public class Coach {
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
             
-
-            int linectr = 0;
+            int linecounter = 0;
 
             while ((line = br.readLine()) != null) {
-                if (linectr != 0){
+                if (linecounter != 0){
 
                         String[] row = line.split(",");
                         
@@ -210,7 +209,6 @@ public class Coach {
                         String dayOfWeekSt = row[1].trim();
 
                         DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekSt.toUpperCase());
-
 
                         String startTimeSt = row[2].trim();
 
@@ -226,18 +224,15 @@ public class Coach {
                                 dateTimePair startPair = new dateTimePair(date, startTime);
                                 dateTimePair endPair = new dateTimePair(date, endTime);
 
-
                                 Event athleticEvent = new Event(startPair, endPair, eventName, 2, "");
 
                                 practiceSchedule.add(athleticEvent); // adds the date
 
                                 }
-                              
                         }
-
                     }
 
-                linectr +=1;
+                linecounter +=1;
                 
             }
         } catch (IOException e) {

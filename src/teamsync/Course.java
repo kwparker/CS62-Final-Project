@@ -265,7 +265,24 @@ public class Course {
 
 
         // Use this line of code to get this to run to populate allCourses:
-        //  Course.main(null);
+        // Course.main(null);
+        System.out.println("\n=== Testing filterByDept(\"BIOL\") ===");
+        ArrayList<Course> bioCourses = Course.filterByDept("BIOL");
+        for (Course c : bioCourses) {
+            System.out.println(c);
+        }
+
+        // Create a schedule with one event to test conflicts
+        Schedule testSchedule = new Schedule();
+        Event dummyEvent = new Event(new dateTimePair(LocalDate.of(2024, 9, 3), java.time.LocalTime.of(9, 30)),
+        new dateTimePair(LocalDate.of(2024, 9, 3), java.time.LocalTime.of(10, 45)), "Dummy Conflict Event", 1, "Conflict Test");
+        testSchedule.addEvent(dummyEvent);
+
+        System.out.println("\n=== Testing filterBySchedule(testSchedule) ===");
+        ArrayList<Course> nonConflicting = Course.filterBySchedule(testSchedule);
+        for (Course c : nonConflicting) {
+            System.out.println(c);
+        }
     }
 
             
