@@ -10,13 +10,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class representation of a coach
+ * 
+ * @author Kai Parker, Guy Fuchs, Tiernan Colby
+ */
 public class Coach {
     
-    String team;
-    String name;
-    String username;
-    Schedule schedule;
-    HashMap<String, Athlete> athletes;
+    String team;  // team the coach is part of
+    String name;  // coach's name
+    String username;  // coach's username
+    Schedule schedule;  // coach's schedule
+    HashMap<String, Athlete> athletes;  // map of all the coach's athletes
 
     public Coach(String name, String username, String team, Schedule schedule, HashMap<String, Athlete> athletes){
         this.name = name;
@@ -26,165 +31,268 @@ public class Coach {
         this.athletes = athletes;
     }
 
+    /**
+     * adds an athlete to the coach's athlete map
+     * @param athlete being added to the team
+     */
     public void addAthlete(Athlete athlete){
         this.athletes.put(athlete.username, athlete);
     }
 
+    /**
+     * gets the coach's name
+     * @return name of coach
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * sets the coach's name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * gets the coach's username
+     * @return the username of coach
+     */
     public String getUserName() {
         return username;
     }
 
+    /**
+     * sets the coach's username
+     * @param username
+     */
     public void setUserName(String username) {
         this.username = username;
     }
 
+    /**
+     * gets the name of the coach's team
+     * @return name of coach's team
+     */
     public String getTeam() {
         return team;
     }
 
+    /**
+     * sets the name of coach's team
+     * @param team name
+     */
     public void setTeam(String team) {
         this.team = team;
     }
 
+    /**
+     * gets the coach's schedule
+     * @return coach's schedule
+     */
     public Schedule getCoachSchedule() {
         return schedule;
     }
 
+    /**
+     * add event to the coach's schedule
+     * @param event being added to schedule
+     */
     public void addEventToCoach(Event event) {
         schedule.addEvent(event);
     }
 
+    /**
+     * removes an event from coach's schedule
+     * @param event to remove from schedule
+     * @return event removed from schedule
+     */
     public Event removeEvent(Event event) {
         return schedule.removeEvent(event);
     }
 
+    /**
+     * remove an event from all the coach's athletes
+     * @param event to remove
+     */
     public void removeEventFromAthletes(Event event) {
-        for (String user: athletes.keySet()) {
-            Athlete athlete = athletes.get(user);
-            athlete.removeEvent(event);
+        for (String user: athletes.keySet()) {  // for username in the athlete map
+            Athlete athlete = athletes.get(user);  // get the athlete corresponding to the username
+            athlete.removeEvent(event);  // remove the event from that athlete's schedule
         }
     }
 
+    /**
+     * remove an event from a particular athlete
+     * @param event to remove
+     * @param user to remove event from
+     */
     public void removeEventFromAthlete(Event event, String user) {
-        Athlete athlete = athletes.get(user);
-        athlete.removeEvent(event);
+        Athlete athlete = athletes.get(user); // get the athlete
+        athlete.removeEvent(event); // remove event from schedule
     }
 
+    /**
+     * removes an event from the entire team
+     * @param event to remove from the team
+     */
     public void removeEventFromTeam(Event event) {
-        removeEventFromAthletes(event);
-        removeEvent(event);
+        removeEventFromAthletes(event);  // from event from athletes
+        removeEvent(event);  // remove event from coach
     }
 
-    
+    /**
+     * replaces an event with a different event
+     * @param original event to change
+     * @param newEvent event to replace old event with
+     */
     public void editEvent(Event original, Event newEvent) {
         schedule.editEvent(original, newEvent);
     }
     
-    // check if coach has conflicts
+    /**
+     * check if coach has conflicts
+     * @return boolean of whether coach has conflicts
+     */
     public boolean hasConflicts(){
         return schedule.detectConflict();
     }
 
-    // get coach's conflicts
+    /**
+     * get coach's conflicts
+     * @return ArrayList<ArrayList<Event>> of the coach's conflicts
+     */
     public ArrayList<ArrayList<Event>> getCoachConflicts(){
         return schedule.getConflicts();
     }
 
-    // add an event to every athlete's schedule
+    /**
+     * add an event to every athlete's schedule
+     * @param event to add to every athlete
+     */
     public void addEventToAllAthletes(Event event) {
-        for (String user: athletes.keySet()) {  // for every username in the 
-            Athlete athlete = athletes.get(user);
-            athlete.addEvent(event);
+        for (String user: athletes.keySet()) {  // for every username in the athlete map
+            Athlete athlete = athletes.get(user); // get the athlete corresponding to username
+            athlete.addEvent(event); // add event to athlete
         }
     }
 
-    // want to add event to all athletes and add event to coach's schedule 
-    public void addEventToTeam(Event event) {  // this might not be right
-        addEventToAllAthletes(event);
-        addEventToCoach(event);
+    /**
+     * adds an event to the whole team
+     * @param event being added to team
+     */
+    public void addEventToTeam(Event event) {
+        addEventToAllAthletes(event);  // adds events to athletes
+        addEventToCoach(event); // adds events to coach
     }
 
-    // add an event to an athlete's schedule
+    /**
+     * add an event to an athlete's schedule
+     * @param event to add
+     * @param username to add event to
+     */
     public void addEventToAthlete(Event event, String username) {
-        athletes.get(username).addEvent(event);
+        athletes.get(username).addEvent(event);  // gets athlete and adds event to their schedule
     }
 
-    // get a particular athlete's schedule
+    /**
+     * get a particular athlete's schedule
+     * @param username of athlete
+     * @return schedule of given athlete
+     */
     public Schedule getAthleteSchedule(String username) {
         return athletes.get(username).schedule;
     }
 
-    // get all athletes
-    public ArrayList<Athlete> getAllAthletes() {  // is it fine for this to be an arrayList of athlete objects?
-        ArrayList<Athlete> athleteList = new ArrayList<Athlete>();
-        for (String user: athletes.keySet()) {
-            athleteList.add(athletes.get(user));
+    /**
+     * get list all athletes
+     * @return ArrayList<Athlete> of the coach's athletes
+     */
+    public ArrayList<Athlete> getAllAthletes() {
+        ArrayList<Athlete> athleteList = new ArrayList<Athlete>(); // array list of athletes
+        for (String user: athletes.keySet()) {  // for each user in the athlete map
+            athleteList.add(athletes.get(user)); // get the athlete and add them to the list
         } 
-        return athleteList;
+        return athleteList;  // full list of athletes
     }
 
-    // remove athlete from team
+    /**
+     * remove athlete from team
+     * @param username of athlete coach wants to remove
+     */
     public void removeAthlete(String username) {  // do we want this method to be void?
         athletes.remove(username);
     }
 
-    // get all athletes' conflicts
-    public HashMap<String, ArrayList<ArrayList<Event>>> getAllConflicts() {  // hashmap that takes username of athlete and maps that to their conflicts
-        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = new HashMap<String, ArrayList<ArrayList<Event>>>();
-        for (String user: athletes.keySet()) {
-            Athlete athlete = athletes.get(user);
-            if (athlete.hasConflicts()) {
-                conflictMap.put(user, athlete.getAthleteConflicts());
+    /**
+     * get all athletes' conflicts
+     * @return map of the athletes' usernames and conflicts
+     */
+    public HashMap<String, ArrayList<ArrayList<Event>>> getAllConflicts() {  
+        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = new HashMap<String, ArrayList<ArrayList<Event>>>(); // hashmap w/ username of athlete that maps to their conflicts
+        for (String user: athletes.keySet()) {  // for each user in the map of athletes
+            Athlete athlete = athletes.get(user);  // get the athlete
+            if (athlete.hasConflicts()) {  // if athlete has conflicts
+                conflictMap.put(user, athlete.getAthleteConflicts());  // put the athlete and conflicts in the conflict map
             }
         }
 
-        return conflictMap;
+        return conflictMap; // map of athletes and their conflicts
     }
 
-    // get a particular athlete's conflicts
+    /**
+     * get a particular athlete's conflicts
+     * @param username of the athlete
+     * @return the athlete's conflicts
+     */
     public ArrayList<ArrayList<Event>> getAthleteConflicts(String username) {
         return athletes.get(username).getAthleteConflicts();
     }
 
+    /**
+     * get all the athletes with conflicts
+     * @return list of athlete's usernames with conflicts
+     */
     public ArrayList<String> getAthletesWithConflicts() {
         ArrayList<Athlete> conflictList = new ArrayList<Athlete>();
-        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = getAllConflicts();
+        HashMap<String, ArrayList<ArrayList<Event>>> conflictMap = getAllConflicts();  // gets the conflict map
 
-        for (String user: conflictMap.keySet()) {
-            conflictList.add(athletes.get(user));
+        for (String user: conflictMap.keySet()) {  // for every user in the conflict map
+            conflictList.add(athletes.get(user));  // adds athlete to the conflict list 
         }
        
         ArrayList<String> userList = new ArrayList<String>();
         
-        for (Athlete athlete: conflictList) {
-            userList.add(athlete.username);
+        for (Athlete athlete: conflictList) {  // for each athlete in the conflict list
+            userList.add(athlete.username);  // add their username to the user list
         }
         
-        return userList;
+        return userList;  // the list of usernames with conflicts
     }
 
+    /**
+     * Clears the coach's schedule
+     */
     public void clearCoachSched() {
         schedule.clearSchedule();
     }
 
+    /**
+     * 
+     * @param year graduation year of the athlete
+     * @return ArrayList<Athlete> with the corresponding graduation year
+     */
     public ArrayList<Athlete> filterByYear(int year) {
-        ArrayList<Athlete> athletesYear = new ArrayList<Athlete>();
-        for (String user: athletes.keySet()) {
-            int gradYear = (athletes.get(user)).gradYear;
+        ArrayList<Athlete> athletesYear = new ArrayList<Athlete>();  // arrayList of athletes
+        for (String user: athletes.keySet()) {  // for each user in the athlete map
+            int gradYear = (athletes.get(user)).gradYear;  // gets their grad year
             if (gradYear == year) {
-                athletesYear.add(athletes.get(user));
+                athletesYear.add(athletes.get(user));  // adds athletes to list if they have the given grad year
             }
         }
 
-        return athletesYear;
+        return athletesYear;  // list of athletes with given grad year
 
     }
 
@@ -198,46 +306,38 @@ public class Coach {
         
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
-            
             int linecounter = 0;
 
             while ((line = br.readLine()) != null) {
                 if (linecounter != 0){
+                    String[] row = line.split(",");
+                    
+                    String eventName = row[0].trim();
+                    String dayOfWeekSt = row[1].trim();
+                    DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekSt.toUpperCase());
 
-                        String[] row = line.split(",");
-                        
-                        String eventName = row[0].trim();
-                        String dayOfWeekSt = row[1].trim();
+                    String startTimeSt = row[2].trim();
+                    LocalTime startTime = LocalTime.parse(startTimeSt);
+                    String endTimeSt = row[3].trim();
+                    LocalTime endTime = LocalTime.parse(endTimeSt);
 
-                        DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekSt.toUpperCase());
+                    for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) { // goes through all the days in date interval
+                        if (date.getDayOfWeek().equals(dayOfWeek)){
 
-                        String startTimeSt = row[2].trim();
+                            dateTimePair startPair = new dateTimePair(date, startTime);
+                            dateTimePair endPair = new dateTimePair(date, endTime);
 
-                        LocalTime startTime = LocalTime.parse(startTimeSt);
-
-                        String endTimeSt = row[3].trim();
-
-                        LocalTime endTime = LocalTime.parse(endTimeSt);
-
-                        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) { // goes through all the days in date interval
-                            if (date.getDayOfWeek().equals(dayOfWeek)){
-
-                                dateTimePair startPair = new dateTimePair(date, startTime);
-                                dateTimePair endPair = new dateTimePair(date, endTime);
-
-                                Event athleticEvent = new Event(startPair, endPair, eventName, 2, "");
-
-                                practiceSchedule.add(athleticEvent); // adds the date
-
-                                }
+                            Event athleticEvent = new Event(startPair, endPair, eventName, 2, "");
+                            practiceSchedule.add(athleticEvent); // adds the date
                         }
                     }
+                }
 
                 linecounter +=1;
                 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Invalid file.");
         }
 
         return practiceSchedule;

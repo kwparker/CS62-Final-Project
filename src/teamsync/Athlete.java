@@ -17,6 +17,7 @@ public class Athlete {
     String major;
     Schedule schedule;
     int gradYear;
+    ArrayList<Course> enrolledCourses;;
     
     public Athlete(String name, String username, String team, String major, Schedule schedule, int gradYear){
         this.team = team;
@@ -25,7 +26,9 @@ public class Athlete {
         this.major = major;
         this.schedule = schedule;
         this.gradYear = gradYear;
+        enrolledCourses = new ArrayList<Course>();
     }
+
     /**
      * gets and returns the name of the athlete
      * @return name of athlete
@@ -169,6 +172,25 @@ public class Athlete {
     }
 
     /**
+     * adds the course to the athlete's enrolled courses
+     * @param course to enroll in
+     */
+    public void enrollCourse(Course course){
+        enrolledCourses.add(course);  // adds the course to the list of schedule
+        for (Event event: course.courseToEvent()){  // for each event in the list of course to event
+            addEvent(event);  // add the event to the schedule
+        }
+    }
+
+    /**
+     * gets all teh courses the athlete is enrolled in
+     * @return ArrayList<Course> of courses the athlete is enrolled in
+     */
+    public ArrayList<Course> getEnrolledCourses(){
+        return enrolledCourses;
+    }
+
+    /**
      * a simple representation of the athlete
      * @return a string representing some of athlete's info
      */
@@ -176,7 +198,6 @@ public class Athlete {
         return "\n\nAthlete: " + name + "\nGrad Year: " + gradYear;
     }
 
-    
     /**
      * more complex representation of the athlete
      * @return a string representing all of the athlete's info
