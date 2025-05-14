@@ -20,9 +20,14 @@ public class MainProgram{
 // need to make sure practice schedule parse work
 
 // change it from inputting a course id to inputting a number that corresponds to a course, number each element in the arrayList (filtered)
-// and then you can do like get(i) in order to access the course you want 
+// and then you can do like get(i) in order to access the course you want to make sure that when you input
+// a course ID, it won't add two that have the same course ID but different meeting days
+// so you should be able to select through index the course you want depending on its ID and
+// when they meet
 
 // get rid of team stuff in team sync app for runCoach()
 
 // when adding a new athlete to a team, the previous practice should be added
 // save practice schedule that the coach and initialize all new athletes with that schedule
+
+// coach should be able to clear current athletic schedule that he uploaded
