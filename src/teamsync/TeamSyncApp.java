@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 public class TeamSyncApp {
 
+    Schedule defaultSchedule;
+
     public Coach coach;
     public HashMap<String, Athlete> athleteMap;
     public Team testTeam;
@@ -23,9 +25,9 @@ public class TeamSyncApp {
     public TeamSyncApp() {
         this.scannerIn = new Scanner(System.in);
         this.athleteMap = new HashMap<String, Athlete>();
+        this.defaultSchedule = new Schedule();
 
-
-        this.coach = new Coach("Test coach", "coach123", "Test team", new Schedule(), athleteMap);
+        this.coach = new Coach("Test coach", "coach123", "Test team", defaultSchedule, athleteMap);
         this.testTeam = new Team("Test team", this.coach, athleteMap);
         
 
@@ -165,6 +167,7 @@ public class TeamSyncApp {
                 ArrayList<Event> practiceSchedule = coach.createPracticeSchedule(fileName, startDate, endDate);
                 for (Event event: practiceSchedule) {
                     coach.addEventToTeam(event);
+                    defaultSchedule.addEvent(event);
                 }
 
             } else if (userChoice.equals("6")) {
@@ -219,7 +222,7 @@ public class TeamSyncApp {
             scannerIn.nextLine();
             
             // Athlete createdAthlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
-            athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
+            athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, defaultSchedule, inputGradYear);
             athleteMap.put(inputUser, athlete);
             
             System.out.println("Account created.");
