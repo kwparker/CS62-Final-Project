@@ -1,5 +1,11 @@
 package teamsync;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.HashMap;
@@ -18,6 +24,41 @@ public class TeamSyncApp {
     }
 
     public void runProgram() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
+            String line;
+            Course aCourse = null;
+
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+
+            if (line.startsWith("{")) {
+                    aCourse = new Course("", "", "", "", "");
+                } 
+                else if (line.startsWith("\"courseSectionId\"")) {
+                    aCourse.setCourseSectionId(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classBeginningTime\"")) {
+                    aCourse.setClassBeginningTime(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classEndingTime\"")) {
+                    aCourse.setClassEndingTime(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classMeetingDays\"")) {
+                    aCourse.setClassMeetingDays(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"instructionSiteName\"")) {
+                    aCourse.setInstructionSiteName(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("}")) {
+                    Course.allCourses.add(aCourse);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("File Error");
+        }
+
+
         System.out.println("Welcome to TeamSync!");
         while(true) {
             System.out.println("\nLog in as:");
@@ -29,7 +70,7 @@ public class TeamSyncApp {
             if (userType.equals("1")) {
                 runCoach();
             } else if (userType.equals("2")) {
-                // runAthlete();
+                runAthlete();
             } else if (userType.equals("3")) {
                 System.out.println("Goodbye! Please come back soon.");
                 return;
@@ -40,6 +81,7 @@ public class TeamSyncApp {
     }
 
     public void runCoach() {
+
         while(true)
             System.out.println("\n*** Coach Menu ***");
             System.out.println("1. View your schedule");
@@ -47,8 +89,8 @@ public class TeamSyncApp {
             System.out.println("3. View an athlete's schedule");
             System.out.println("4. View athlete conflicts");
             System.out.println("5. Input practice schedule");
-            System.out.println("6. View more options"); // figure out what to do with this
-            System.out.println("7. Go back");
+            // System.out.println("6. View more options"); // figure out what to do with this
+            System.out.println("6. Go back");
 
             String userChoice = scannerIn.nextLine();
 
@@ -56,7 +98,7 @@ public class TeamSyncApp {
                 System.out.println(coach.getCoachSchedule());
                 break;
             } else if (userChoice.equals("2")) {
-                Event event = eventFromInput();  // create this method
+                Event event = eventFromInput();
                 coach.addEventToTeam(event);
                 System.out.println("Event added to athletes and coach.");
             } else if (userChoice.equals("3")) {
@@ -68,29 +110,123 @@ public class TeamSyncApp {
                     athlete.printConflicts();
                 } break;
             } else if (userChoice.equals("5")) {
-                System.out.println("Input practice schedule file path");
+                System.out.println("Input practice schedule file path"); // should we have a try to make sure this is valid
                 String fileName = scannerIn.nextLine();
-                while (true) {
-                    System.out.println("Practice start date in form YYYY-MM-DD");
-                    String startDate = scannerIn.nextLine();
-                    
-
-                }
                 
+                System.out.println("Input season start date in form YYYY-MM-DD");
+                LocalDate startDate = null;
+                while (startDate == null) {
+                    String date = scannerIn.nextLine();
+                    try {
+                        startDate = LocalDate.parse(date);
+                    } catch (DateTimeException e) {
+                        System.out.println("Invalid date. Please use YYYY-MM-DD format.")
+                    } 
+                }
+
+                System.out.println("Input season end date in form YYYY-MM-DD");
+                LocalDate endDate = null;
+                while (endDate == null) {
+                    String date = scannerIn.nextLine();
+                    try {
+                        endDate = LocalDate.parse(date);
+                    } catch (DateTimeException e) {
+                        System.out.println("Invalid date. Please use YYYY-MM-DD format");
+                    }
+                }
+
+                coach.createPracticeSchedule(fileName, startDate, endDate);
                 
             } else if (userChoice.equals("6")) {
+                return;
+            } 
+            // else if (userChoice.equals("7")) {
                 
-            } else if (userChoice.equals("7")) {
-                
-            } else {
-                System.out.println("Invalid input. Please choice a number b/w 1 and 7.");
+            //
+            else {
+                System.out.println("Invalid input. Please choice a number between 1 and 7.");
             }
+    
+    }
+
+    public void runAthlete() {
+        System.out.print("Enter your username: ");
+        String username = scannerIn.nextLine();
+
+        Athlete athlete = athleteMap.get(username);
+        if (athlete == null) {
+            System.out.println("User not found.");
+            return;
+        }
+
+        while (true) {
+            System.out.println("\n*** Athlete Menu (" + athlete.getName() + ") ***");
+            System.out.println("1. View schedule");
+            System.out.println("2. View conflicts");
+            System.out.println("3. Add event");
+            System.out.println("4. Register for courses");
+            System.out.println("5. Back");
+            String choice = scannerIn.nextLine();
+
+            if (choice.equals("1")){
+                System.out.println(athlete);
+                break;
+            }
+            else if (choice.equals("2")){
+                athlete.printConflicts();
+                break;
+            }
+            else if (choice.equals("3")){
+                Event event = eventFromInput();
+                athlete.addEvent(event);
+                System.out.println("Event added.");
+                break;
+            }
+            else if (choice.equals("4")) {
+                System.out.println("Course filter options");
+                System.out.println("1. Filter by department");
+                System.out.println("2. Filter by athletic schedule");
+                System.out.println("3. Filter by both");
+
+                String input = scannerIn.nextLine();
+                
+                if (input.equals("1")) {
+                    
+                }
+
+
+            }
+            else if (choice.equals("5")){
+                return;
+            }
+            else{
+                System.out.println("Invalid input. Pick a number between 1 and 4.");
+            }
+        }
 
     }
 
     public Event eventFromInput() {
-        return null;
+        System.out.print("Event name:");
+        String eventName = scannerIn.nextLine();
+
+        System.out.print("Date (YYYY-MM-DD): ");
+        LocalDate date = LocalDate.parse(scannerIn.nextLine());
+
+        System.out.print("Start time (HH:MM): ");
+        LocalTime start = LocalTime.parse(scannerIn.nextLine());
+
+        System.out.print("End time (HH:MM): ");
+        LocalTime end = LocalTime.parse(scannerIn.nextLine());
+
+        System.out.print("Event type (1 = Academic, 2 = Athletic, 3 = Other): ");
+        int type = Integer.parseInt(scannerIn.nextLine());
+
+        System.out.print("Extra info (e.g., location): ");
+        String info = scannerIn.nextLine();
+
+        return new Event( new dateTimePair(date, start), new dateTimePair(date, end), eventName, type, info);
     }
 }
- 
+
 

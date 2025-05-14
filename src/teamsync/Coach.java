@@ -188,12 +188,9 @@ public class Coach {
     // assume that the start date and end date are valid for fall 2024
     // this method take a file path that contains a weekly scedule of athletic practices/games/etc, a start date, end date, and creates an arralist of events which covers
     // the time interval with the weekly pratice schedule - this maps a weekly athletic schedule to a time interval, likely the fall 2024 semester 
-    public ArrayList<Event> createPracticeScedule(String filepath, String startDate, String endDate){
+    public ArrayList<Event> createPracticeSchedule(String filepath, LocalDate startDate, LocalDate endDate){
 
         ArrayList<Event> practiceSchedule = new ArrayList<>();
-
-        LocalDate start = LocalDate.parse(startDate); 
-        LocalDate end = LocalDate.parse(endDate); 
         
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
