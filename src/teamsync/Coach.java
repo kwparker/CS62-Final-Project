@@ -279,6 +279,22 @@ public class Coach {
     }
 
     /**
+     * Prints the team roster
+     */
+    public void printTeamRoster(){
+        ArrayList<Athlete> teamAthletes = getAllAthletes(); // get the athletes on the team
+        if (teamAthletes.isEmpty()){ // check if there are no athletes
+            System.out.println("\nThere are currently no athletes on your team.");
+            return; // exit the method
+        }
+
+        System.out.println("\nThe athletes on your team are: ");
+        for (Athlete athlete : teamAthletes) {
+            System.out.println(athlete.simpleToString()); // prints each athlete on the team
+        }
+    }
+
+    /**
      * 
      * @param year graduation year of the athlete
      * @return ArrayList<Athlete> with the corresponding graduation year
@@ -296,13 +312,22 @@ public class Coach {
 
     }
 
-    // assumes startDate and endDate in the form 2025-05-13, year-month-day
-    // assume that the start date and end date are valid for fall 2024
-    // this method take a file path that contains a weekly scedule of athletic practices/games/etc, a start date, end date, and creates an arralist of events which covers
-    // the time interval with the weekly pratice schedule - this maps a weekly athletic schedule to a time interval, likely the fall 2024 semester 
+    
+    /**
+     * assumes startDate and endDate in the form 2025-05-13, year-month-day
+     * assume that the start date and end date are valid for fall 2024
+     * this method take a file path that contains a weekly scedule of athletic practices/games/etc, a start date, end date, and creates
+     * an arralist of events which covers the time interval with the weekly pratice schedule - this maps a weekly athletic schedule to a 
+     * time interval, likely the fall 2024 semester
+     * 
+     * @param filepath path of practice schedule file
+     * @param startDate start date of the athletic season
+     * @param endDate end date of the athleteic season
+     * @return ArrayList<Event> with the schedule for the whole season
+     */
     public ArrayList<Event> createPracticeSchedule(String filepath, LocalDate startDate, LocalDate endDate){
 
-        ArrayList<Event> practiceSchedule = new ArrayList<>();
+        ArrayList<Event> practiceSchedule = new ArrayList<>();  // practice schedule array list
         
         try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
             String line;
@@ -358,7 +383,6 @@ public class Coach {
 
     public static void main(String[] args) {
 
-        
         // Create schedules
         Schedule schedule1 = new Schedule();
         Schedule schedule2 = new Schedule();
@@ -367,8 +391,6 @@ public class Coach {
         // Create athletes
         Athlete athlete1 = new Athlete("Tiernan", "tiernan123", "Swim", "Math", schedule1, 2026);
         Athlete athlete2 = new Athlete("Guy", "guy123", "Swim", "Physics", schedule2, 2025);
-
-
     
         // Create map of athletes
         HashMap<String, Athlete> athleteMap = new HashMap<>();
@@ -417,11 +439,6 @@ public class Coach {
             }
         }
 
-        // prints the arrylist with the events for the time interval
-        //System.out.println(coach.createPracticeScedule("Data/SoccerSampleSchedule.csv", "2024-09-11", "2024-11-01"));
-        
-        
-        
     }
 
 

@@ -195,7 +195,7 @@ public class Athlete {
      * @return a string representing some of athlete's info
      */
     public String simpleToString() {
-        return "\n\nAthlete: " + name + "\nGrad Year: " + gradYear;
+        return "\nAthlete: " + name + "\nGrad Year: " + gradYear;
     }
 
     /**

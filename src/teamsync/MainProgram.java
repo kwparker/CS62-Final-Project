@@ -20,6 +20,7 @@ public class MainProgram{
 
 // give option for coach to add an athlete?
 
+// add option to filter courses by 
 
 
 
