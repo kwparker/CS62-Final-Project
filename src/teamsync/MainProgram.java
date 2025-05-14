@@ -25,4 +25,4 @@ public class MainProgram{
 // get rid of team stuff in team sync app for runCoach()
 
 // when adding a new athlete to a team, the previous practice should be added
-// save practice schedule that the coach uploaded and initialize all new athletes with that schedule
+// save practice schedule that the coach and initialize all new athletes with that schedule
