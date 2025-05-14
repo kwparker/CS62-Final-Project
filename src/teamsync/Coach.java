@@ -215,7 +215,7 @@ public class Coach {
 
                         LocalTime endTime = LocalTime.parse(endTimeSt);
 
-                        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) { // goes through all the days in date interval
+                        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) { // goes through all the days in date interval
                             if (date.getDayOfWeek().equals(dayOfWeek)){
 
                                 dateTimePair startPair = new dateTimePair(date, startTime);

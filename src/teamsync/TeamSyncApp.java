@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.HashMap;
 
@@ -21,9 +23,8 @@ public class TeamSyncApp {
         this.scannerIn = new Scanner(System.in);
         this.athleteMap = new HashMap<String, Athlete>();
 
-    }
+        // add some sort of sample data here so the athletes and coach are here
 
-    public void runProgram() {
         try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
             String line;
             Course aCourse = null;
@@ -58,7 +59,10 @@ public class TeamSyncApp {
             System.out.println("File Error");
         }
 
+    }
 
+    public void runProgram() {
+        
         System.out.println("Welcome to TeamSync!");
         while(true) {
             System.out.println("\nLog in as:");
@@ -81,9 +85,16 @@ public class TeamSyncApp {
     }
 
     public void runCoach() {
-
+        Schedule coachSchedule = new Schedule();
+        coach = new Coach("Coach Name", "coach123", "TeamName", coachSchedule, athleteMap);
+        
         while(true)
             System.out.println("\n*** Coach Menu ***");
+            
+            System.out.println("State your team.");
+            String coachTeam = scannerIn.nextLine();
+            coach.setTeam(coachTeam);
+
             System.out.println("1. View your schedule");
             System.out.println("2. Add event to team");
             System.out.println("3. View an athlete's schedule");
@@ -135,7 +146,10 @@ public class TeamSyncApp {
                     }
                 }
 
-                coach.createPracticeSchedule(fileName, startDate, endDate);
+                ArrayList<Event> practiceSchedule = coach.createPracticeSchedule(fileName, startDate, endDate);
+                for (Event event: practiceSchedule) {
+                    coach.addEventToTeam(event);
+                }
                 
             } else if (userChoice.equals("6")) {
                 return;
@@ -153,7 +167,9 @@ public class TeamSyncApp {
         System.out.print("Enter your username: ");
         String username = scannerIn.nextLine();
 
-        Athlete athlete = athleteMap.get(username);
+        Athlete athlete = Athlete();
+        athleteMap.get(username);
+
         if (athlete == null) {
             System.out.println("User not found.");
             return;
@@ -189,11 +205,151 @@ public class TeamSyncApp {
                 System.out.println("3. Filter by both");
 
                 String input = scannerIn.nextLine();
-                
-                if (input.equals("1")) {
-                    
-                }
 
+                if (input.equals("1")) {
+                    System.out.println("Input department prefix");
+                    String dept = scannerIn.nextLine();
+
+                    ArrayList<Course> filtered = Course.filterByDept(dept);
+
+                    ArrayList<Course> coursesEnrolledIn = new ArrayList<>();
+                    
+                    int courseAmount = 0;
+                    while (courseAmount == 0) {
+                        System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
+                        try {
+                        courseAmount = scannerIn.nextInt();
+                        if (courseAmount > 5 || courseAmount < 1){
+                            System.out.println("Invalid input. Pick a number between 1 and 5.");
+                            courseAmount = 0;
+                        }
+                        }
+                        catch (InputMismatchException e) {
+                            System.out.println("Please pick an integer between 1 and 5.");
+                        }
+                    }
+                    
+                    while (coursesEnrolledIn.size() < courseAmount) {
+                        int currentSize = coursesEnrolledIn.size();
+                        System.out.println("Choose a course section ID to add");
+                        String chosenCourseID = scannerIn.nextLine();
+                        
+                        for (Course course: filtered){
+                            if (course.getCourseSectionId().equals(chosenCourseID)){
+                                coursesEnrolledIn.add(course);
+                                System.out.println("Enrolled in:\n " + course);
+                            }
+                        }
+                        if (currentSize == coursesEnrolledIn.size()) {
+                            System.out.println("Course not found. Enter a valid course section ID.");
+                        }
+                    }
+
+                    for (Course course: coursesEnrolledIn) {
+                        ArrayList<Event> eventList = course.courseToEvent();
+                        for (Event event: eventList) {
+                            athlete.addEvent(event);
+                        }
+                    }
+
+                    System.out.println("Course registration complete.");
+
+                }
+                else if (input.equals("2")) {
+
+                    ArrayList<Course> filtered = Course.filterBySchedule(athlete.getAthleteSchedule());
+
+                    ArrayList<Course> coursesEnrolledIn = new ArrayList<>();
+                    
+                    int courseAmount = 0;
+                    while (courseAmount == 0) {
+                        System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
+                        try {
+                        courseAmount = scannerIn.nextInt();
+                        if (courseAmount > 5 || courseAmount < 1){
+                            System.out.println("Invalid input. Pick a number between 1 and 5.");
+                            courseAmount = 0;
+                        }
+                        }
+                        catch (InputMismatchException e) {
+                            System.out.println("Please pick an integer between 1 and 5.");
+                        }
+                    }
+                    
+                    while (coursesEnrolledIn.size() < courseAmount) {
+                        int currentSize = coursesEnrolledIn.size();
+                        System.out.println("Choose a course section ID to add");
+                        String chosenCourseID = scannerIn.nextLine();
+                        
+                        for (Course course: filtered){
+                            if (course.getCourseSectionId().equals(chosenCourseID)){
+                                coursesEnrolledIn.add(course);
+                                System.out.println("Enrolled in:\n " + course);
+                            }
+                        }
+                        if (currentSize == coursesEnrolledIn.size()) {
+                            System.out.println("Course not found. Enter a valid course section ID.");
+                        }
+                    }
+
+                    for (Course course: coursesEnrolledIn) {
+                        ArrayList<Event> eventList = course.courseToEvent();
+                        for (Event event: eventList) {
+                            athlete.addEvent(event);
+                        }
+                    }
+
+                    System.out.println("Course registration complete.");
+
+                }
+                else if (input.equals("3")) {
+                    System.out.println("Input department prefix");
+                    String dept = scannerIn.nextLine();
+
+                    ArrayList<Course> filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule());
+
+                    ArrayList<Course> coursesEnrolledIn = new ArrayList<>();
+                    
+                    int courseAmount = 0;
+                    while (courseAmount == 0) {
+                        System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
+                        try {
+                        courseAmount = scannerIn.nextInt();
+                        if (courseAmount > 5 || courseAmount < 1){
+                            System.out.println("Invalid input. Pick a number between 1 and 5.");
+                            courseAmount = 0;
+                        }
+                        }
+                        catch (InputMismatchException e) {
+                            System.out.println("Please pick an integer between 1 and 5.");
+                        }
+                    }
+                    
+                    while (coursesEnrolledIn.size() < courseAmount) {
+                        int currentSize = coursesEnrolledIn.size();
+                        System.out.println("Choose a course section ID to add");
+                        String chosenCourseID = scannerIn.nextLine();
+                        
+                        for (Course course: filtered){
+                            if (course.getCourseSectionId().equals(chosenCourseID)){
+                                coursesEnrolledIn.add(course);
+                                System.out.println("Enrolled in:\n " + course);
+                            }
+                        }
+                        if (currentSize == coursesEnrolledIn.size()) {
+                            System.out.println("Course not found. Enter a valid course section ID.");
+                        }
+                    }
+
+                    for (Course course: coursesEnrolledIn) {
+                        ArrayList<Event> eventList = course.courseToEvent();
+                        for (Event event: eventList) {
+                            athlete.addEvent(event);
+                        }
+                    }
+
+                    System.out.println("Course registration complete.");
+                }
 
             }
             else if (choice.equals("5")){
@@ -225,7 +381,7 @@ public class TeamSyncApp {
         System.out.print("Extra info (e.g., location): ");
         String info = scannerIn.nextLine();
 
-        return new Event( new dateTimePair(date, start), new dateTimePair(date, end), eventName, type, info);
+        return new Event(new dateTimePair(date, start), new dateTimePair(date, end), eventName, type, info);
     }
 }
 
