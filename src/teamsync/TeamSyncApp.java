@@ -342,25 +342,49 @@ public void courseRegistration(ArrayList<Course> filtered, Athlete athlete) {
         }
     }
     
+    StringBuilder coursePrint = new StringBuilder();
+    int index = 1;
     for (Course course : filtered) {
-        System.out.println(course);
+        coursePrint.append(index + ": ");
+        coursePrint.append(course + "\n");
+        index++;
+        // System.out.println(course);
     }
+
+    System.out.println(coursePrint.toString());
 
 
     while (coursesEnrolledIn.size() < courseAmount) {
-        int currentSize = coursesEnrolledIn.size();
-        System.out.println("Choose a course section ID to add");
-        String chosenCourseID = scannerIn.nextLine().toUpperCase();
+        // int currentSize = coursesEnrolledIn.size();
+
+        int courseNumber = 0;
+        while (courseNumber == 0) {
+            System.out.println("Input number next to course you want to add");
         
-        for (Course course: filtered){
-            if (course.getCourseSectionId().equals(chosenCourseID)){
-                coursesEnrolledIn.add(course);
-                System.out.println("Enrolled in:\n " + course);
+            try {
+                courseNumber = scannerIn.nextInt();
+                scannerIn.nextLine();
+                if (courseNumber > filtered.size() || courseNumber < 1) {
+                    System.out.println("Invalid input. Please choose the number next to the course you want");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a number next to a course");
             }
         }
-        if (currentSize == coursesEnrolledIn.size()) {
-            System.out.println("Course not found. Enter a valid course section ID.");
-        }
+        
+
+        // String chosenCourseID = scannerIn.nextLine().toUpperCase();
+        Course course = filtered.get(courseNumber - 1);
+        coursesEnrolledIn.add(course);
+        // for (Course course: filtered){
+        //     if (course.getCourseSectionId().equals(chosenCourseID)){
+        //         coursesEnrolledIn.add(course);
+        System.out.println("Enrolled in:\n " + course);
+            // }
+        // }
+        // if (currentSize == coursesEnrolledIn.size()) {
+        //     System.out.println("Course not found. Enter a valid course section ID.");
+        // }
     }
 
     for (Course course: coursesEnrolledIn) {
