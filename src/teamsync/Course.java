@@ -41,9 +41,15 @@ public class Course {
         }
 
     public LocalTime getClassBeginningTime(){
-
+        if (classBeginningTime == null || classBeginningTime.length() < 3) {
+            throw new IllegalArgumentException("Invalid classBeginningTime: " + classBeginningTime);
+        }    
+        String correctTime = classBeginningTime;
+        if (classBeginningTime.length() == 3){
+            correctTime = "0" + classBeginningTime;
+        }
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HHmm");
-        LocalTime time = LocalTime.parse(classBeginningTime, format);
+        LocalTime time = LocalTime.parse(correctTime, format);
         return time;
     }
 
@@ -52,8 +58,15 @@ public class Course {
     }
 
     public LocalTime getClassEndingTime(){
+        if (classEndingTime == null || classEndingTime.length() < 3) {
+            throw new IllegalArgumentException("Invalid classEndingTime: " + classEndingTime);
+        }
+        String correctTime = classEndingTime;
+        if (classEndingTime.length() == 3){
+            correctTime = "0" + classEndingTime;
+        }
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HHmm");
-        LocalTime time = LocalTime.parse(classEndingTime, format);
+        LocalTime time = LocalTime.parse(correctTime, format);
         return time;
     }
 
@@ -170,8 +183,21 @@ public class Course {
     public static ArrayList<Course> filterBySchedule(Schedule schedule) {
         ArrayList<Course> nonConflicting = new ArrayList<>();
         for (Course course: allCourses){
+            // skip if no valid time or no meeting days
+            if (course.classBeginningTime.equals("0") || course.classEndingTime.equals("0") || course.classMeetingDays.equals("-------")) {
+                continue;
+            }
             boolean hasConflict = false;
             
+            ArrayList<Event> courseEvents;
+            try{
+                courseEvents = course.courseToEvent();
+            }
+            catch (Exception e){
+                System.out.println("Skipping course with invalid time: " + course.courseSectionId);
+                continue;
+            }
+
             for (Event courseEvent: course.courseToEvent()){
 
                 for (Event scheduledEvent: schedule.getSchedule()){
@@ -259,26 +285,37 @@ public class Course {
 
 
         // Printing out all courses
-        for (Course courses : allCourses) {
-            System.out.println(courses.classMeetingDays);
-        }
+        // for (Course courses : allCourses) {
+        //     System.out.println(courses.classMeetingDays);
+        // }
 
 
         // Use this line of code to get this to run to populate allCourses:
         // Course.main(null);
-        System.out.println("\n=== Testing filterByDept(\"BIOL\") ===");
-        ArrayList<Course> bioCourses = Course.filterByDept("BIOL");
-        for (Course c : bioCourses) {
-            System.out.println(c);
-        }
+        // System.out.println("\n=== Testing filterByDept(\"BIOL\") ===");
+        // ArrayList<Course> bioCourses = Course.filterByDept("BIOL");
+        // for (Course c : bioCourses) {
+        //     System.out.println(c);
+        // }
 
         // Create a schedule with one event to test conflicts
         Schedule testSchedule = new Schedule();
-        Event dummyEvent = new Event(new dateTimePair(LocalDate.of(2024, 9, 3), java.time.LocalTime.of(9, 30)),
-        new dateTimePair(LocalDate.of(2024, 9, 3), java.time.LocalTime.of(10, 45)), "Dummy Conflict Event", 1, "Conflict Test");
-        testSchedule.addEvent(dummyEvent);
+        LocalDate start = LocalDate.of(2024, 8, 26);
+        LocalDate end = LocalDate.of(2024, 12, 4);
 
-        System.out.println("\n=== Testing filterBySchedule(testSchedule) ===");
+        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+            DayOfWeek weekDay = date.getDayOfWeek();
+            if (weekDay != DayOfWeek.SATURDAY && weekDay != DayOfWeek.SUNDAY) {
+                Event dummyEvent = new Event(
+                    new dateTimePair(date, LocalTime.of(9, 0)),
+                    new dateTimePair(date, LocalTime.of(14, 0)),
+                    "Daily Conflict Blocker", 1, "Simulated Schedule"
+                );
+                testSchedule.addEvent(dummyEvent);
+            }
+        }
+        
+        System.out.println("\n*** Testing filterBySchedule(testSchedule) ***");
         ArrayList<Course> nonConflicting = Course.filterBySchedule(testSchedule);
         for (Course c : nonConflicting) {
             System.out.println(c);
