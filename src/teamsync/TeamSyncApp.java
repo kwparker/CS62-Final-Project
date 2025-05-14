@@ -1,6 +1,7 @@
 package teamsync;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.DateTimeException;
@@ -26,60 +27,23 @@ public class TeamSyncApp {
         this.scannerIn = new Scanner(System.in);
         this.athleteMap = new HashMap<String, Athlete>();
         this.defaultSchedule = new Schedule();
-
         this.coach = new Coach("Test coach", "coach123", "Test team", defaultSchedule, athleteMap);
         this.testTeam = new Team("Test team", this.coach, athleteMap);
         
-
-        // add some sort of sample data here so the athletes and coach are here
-
-        try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
-            String line;
-            Course aCourse = null;
-
-        while ((line = reader.readLine()) != null) {
-            line = line.trim();
-
-            if (line.startsWith("{")) {
-                    aCourse = new Course("", "", "", "", "");
-                } 
-                else if (line.startsWith("\"courseSectionId\"")) {
-                    aCourse.setCourseSectionId(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("\"classBeginningTime\"")) {
-                    aCourse.setClassBeginningTime(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("\"classEndingTime\"")) {
-                    aCourse.setClassEndingTime(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("\"classMeetingDays\"")) {
-                    aCourse.setClassMeetingDays(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("\"instructionSiteName\"")) {
-                    aCourse.setInstructionSiteName(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("}")) {
-                    Course.allCourses.add(aCourse);
-                }
-            }
-
-        } catch (IOException e) {
-            System.out.println("File Error, file not found");
-        }
-
-        // Course.main(null); // this should work
-        
-        Schedule schedule = new Schedule();
-        Athlete athlete1 = new Athlete("athlete1", "athlete11", "Not yet specified", "Not yet specified", schedule, 2027);
-        Athlete athlete2 = new Athlete("athlete2", "athlete12", "Not yet specified", "Not yet specified", schedule, 2027);
-        Athlete athlete3 = new Athlete("athlete3", "athlete13", "Not yet specified", "Not yet specified", schedule, 2027);
-        Athlete athlete4 = new Athlete("athlete4", "athlete14", "Not yet specified", "Not yet specified", schedule, 2027);
-        Athlete athlete5 = new Athlete("athlete5", "athlete15", "Not yet specified", "Not yet specified", schedule, 2027);
-
+        loadCourseData("Data/course-section-schedule.json");
     }
 
+        // add some sort of sample data here so the athletes and coach are here
+        // Course.main(null); // this should work
+        // Schedule schedule = new Schedule();
+        // Athlete athlete1 = new Athlete("athlete1", "athlete11", "Not yet specified", "Not yet specified", schedule, 2027);
+        // Athlete athlete2 = new Athlete("athlete2", "athlete12", "Not yet specified", "Not yet specified", schedule, 2027);
+        // Athlete athlete3 = new Athlete("athlete3", "athlete13", "Not yet specified", "Not yet specified", schedule, 2027);
+        // Athlete athlete4 = new Athlete("athlete4", "athlete14", "Not yet specified", "Not yet specified", schedule, 2027);
+        // Athlete athlete5 = new Athlete("athlete5", "athlete15", "Not yet specified", "Not yet specified", schedule, 2027);
+
+
     public void runProgram() {
-        
         System.out.println("Welcome to TeamSync!");
         while(true) {
             System.out.println("\nLog in as:");
@@ -116,7 +80,7 @@ public class TeamSyncApp {
             System.out.println("2. Add event to team");
             System.out.println("3. View an athlete's schedule");
             System.out.println("4. View athlete conflicts");
-            System.out.println("5. Input practice schedule");
+            System.out.println("5. Input or change athletic schedule");
             // System.out.println("6. View more options"); // figure out what to do with this
             System.out.println("6. Go back");
 
@@ -139,8 +103,37 @@ public class TeamSyncApp {
                 } 
                 
             } else if (userChoice.equals("5")) {
-                System.out.println("Input practice schedule file path"); // should we have a try to make sure this is valid
-                String fileName = scannerIn.nextLine();
+                if (!defaultSchedule.isEmpty()) {
+                    System.out.println("Do you want to clear the current athletic schedule? (Y/N)");
+                    String decision = scannerIn.nextLine().toUpperCase();
+                    if (decision.equals("Y")) {
+                        for (Athlete athlete: coach.getAllAthletes()){
+                            ArrayList<Event> athleticEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(2));
+                            
+                            for (Event event: athleticEvents){
+                                athlete.removeEvent(event);
+                            }
+                        }
+
+                        coach.getCoachSchedule().clearSchedule();
+                        defaultSchedule.clearSchedule();
+                        System.out.println("Old athletic schedule cleared.");
+                    }
+                    else{
+                        System.out.println("Athletic schedule not cleared.");
+                    }
+                }
+                
+                String filePath = null;
+                while (filePath == null) {
+                    System.out.println("Input athletic schedule filename.csv (Part of path after 'Data/') "); // should we have a try to make sure this is valid
+                    String fileName = scannerIn.nextLine();
+                    filePath = "Data/" + fileName;
+                    if (!(new File(filePath)).exists()) {
+                        System.out.println("File not found. Please enter a valid file name");
+                        filePath = null;
+                    }
+                }
                 
                 System.out.println("Input season start date in form YYYY-MM-DD");
                 LocalDate startDate = null;
@@ -164,11 +157,13 @@ public class TeamSyncApp {
                     }
                 }
 
-                ArrayList<Event> practiceSchedule = coach.createPracticeSchedule(fileName, startDate, endDate);
+                ArrayList<Event> practiceSchedule = coach.createPracticeSchedule(filePath, startDate, endDate);
                 for (Event event: practiceSchedule) {
                     coach.addEventToTeam(event);
-                    defaultSchedule.addEvent(event);
+                    this.defaultSchedule.addEvent(event);
                 }
+
+                System.out.println("Athletic schedule uploaded.");
 
             } else if (userChoice.equals("6")) {
                 return;
@@ -256,7 +251,7 @@ public class TeamSyncApp {
                 Schedule currentSchedule =  athlete.getAthleteSchedule();
                 for (Event event : currentSchedule.getEventsByType(1)) {
                         athlete.removeEvent(event);
-                } 
+                }
                 
                 System.out.println("Previous academic events removed from your schedule.");
                 System.out.println("Course filter options");
@@ -324,79 +319,102 @@ public class TeamSyncApp {
     }
 
 
-public void courseRegistration(ArrayList<Course> filtered, Athlete athlete) {
-    ArrayList<Course> coursesEnrolledIn = new ArrayList<>();   
-    int courseAmount = 0;
-    
-    while (courseAmount == 0) {
-        System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
-        try {
-            courseAmount = scannerIn.nextInt();
-            scannerIn.nextLine();
-            if (courseAmount > 5 || courseAmount < 1){
-                System.out.println("Invalid input. Pick a number between 1 and 5.");
-                courseAmount = 0;
-            }
-        } catch (InputMismatchException e) {
-            System.out.println("Please pick an integer between 1 and 5.");
-        }
-    }
-    
-    StringBuilder coursePrint = new StringBuilder();
-    int index = 1;
-    for (Course course : filtered) {
-        coursePrint.append(index + ": ");
-        coursePrint.append(course + "\n");
-        index++;
-        // System.out.println(course);
-    }
-
-    System.out.println(coursePrint.toString());
-
-
-    while (coursesEnrolledIn.size() < courseAmount) {
-        // int currentSize = coursesEnrolledIn.size();
-
-        int courseNumber = 0;
-        while (courseNumber == 0) {
-            System.out.println("Input number next to course you want to add");
+    public void courseRegistration(ArrayList<Course> filtered, Athlete athlete) {
+        ArrayList<Course> coursesEnrolledIn = new ArrayList<>();   
+        int courseAmount = 0;
         
+        while (courseAmount == 0) {
+            System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
             try {
-                courseNumber = scannerIn.nextInt();
+                courseAmount = scannerIn.nextInt();
                 scannerIn.nextLine();
-                if (courseNumber > filtered.size() || courseNumber < 1) {
-                    System.out.println("Invalid input. Please choose the number next to the course you want");
+                if (courseAmount > 5 || courseAmount < 1){
+                    System.out.println("Invalid input. Pick a number between 1 and 5.");
+                    courseAmount = 0;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Please enter a number next to a course");
+                System.out.println("Please pick an integer between 1 and 5.");
             }
         }
-        
-
-        // String chosenCourseID = scannerIn.nextLine().toUpperCase();
-        Course course = filtered.get(courseNumber - 1);
-        coursesEnrolledIn.add(course);
-        // for (Course course: filtered){
-        //     if (course.getCourseSectionId().equals(chosenCourseID)){
-        //         coursesEnrolledIn.add(course);
-        System.out.println("Enrolled in:\n " + course);
-            // }
-        // }
-        // if (currentSize == coursesEnrolledIn.size()) {
-        //     System.out.println("Course not found. Enter a valid course section ID.");
-        // }
-    }
-
-    for (Course course: coursesEnrolledIn) {
-        ArrayList<Event> eventList = course.courseToEvent();
-        for (Event event: eventList) {
-            athlete.addEvent(event);
-        }
-    }
-
-    System.out.println("Course registration complete.");
-    }
     
+        StringBuilder coursePrint = new StringBuilder();
+        int index = 1;
+        for (Course course : filtered) {
+            coursePrint.append(index + ": ");
+            coursePrint.append(course + "\n");
+            index++;
+        }
+
+        System.out.println(coursePrint.toString());
+
+        while (coursesEnrolledIn.size() < courseAmount) {
+
+            int courseNumber = 0;
+            while (courseNumber == 0) {
+                System.out.println("Input number next to course you want to add");
+            
+                try {
+                    courseNumber = scannerIn.nextInt();
+                    scannerIn.nextLine();
+                    if (courseNumber > filtered.size() || courseNumber < 1) {
+                        System.out.println("Invalid input. Please choose the number next to the course you want");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Please enter a number next to a course");
+                }
+            }
+            
+            Course course = filtered.get(courseNumber - 1);
+            coursesEnrolledIn.add(course);
+
+            System.out.println("Enrolled in:\n " + course);
+        }
+
+        for (Course course: coursesEnrolledIn) {
+            ArrayList<Event> eventList = course.courseToEvent();
+            for (Event event: eventList) {
+                athlete.addEvent(event);
+            }
+        }
+
+        System.out.println("Course registration complete.");
+    }
+
+    public void loadCourseData(String filePath) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
+            String line;
+            Course aCourse = null;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+
+                if (line.startsWith("{")) {
+                    aCourse = new Course("", "", "", "", "");
+                } 
+                else if (line.startsWith("\"courseSectionId\"")) {
+                    aCourse.setCourseSectionId(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classBeginningTime\"")) {
+                    aCourse.setClassBeginningTime(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classEndingTime\"")) {
+                    aCourse.setClassEndingTime(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"classMeetingDays\"")) {
+                    aCourse.setClassMeetingDays(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("\"instructionSiteName\"")) {
+                    aCourse.setInstructionSiteName(Course.getLineValue(line));
+                } 
+                else if (line.startsWith("}")) {
+                    Course.allCourses.add(aCourse);
+                }
+            }
+
+        } catch (IOException e) {
+                System.out.println("File Error, file not found");
+            }
+    }
 }
 
 
