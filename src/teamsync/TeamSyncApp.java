@@ -58,6 +58,12 @@ public class TeamSyncApp {
         } catch (IOException e) {
             System.out.println("File Error");
         }
+        Schedule schedule = new Schedule();
+        Athlete athlete1 = new Athlete("athlete1", "athlete11", "Not yet specified", "Not yet specified", schedule, 2027);
+        Athlete athlete2 = new Athlete("athlete2", "athlete12", "Not yet specified", "Not yet specified", schedule, 2027);
+        Athlete athlete3 = new Athlete("athlete3", "athlete13", "Not yet specified", "Not yet specified", schedule, 2027);
+        Athlete athlete4 = new Athlete("athlete4", "athlete14", "Not yet specified", "Not yet specified", schedule, 2027);
+        Athlete athlete5 = new Athlete("athlete5", "athlete15", "Not yet specified", "Not yet specified", schedule, 2027);
 
     }
 
@@ -167,11 +173,13 @@ public class TeamSyncApp {
         System.out.print("Enter your username: ");
         String username = scannerIn.nextLine();
 
-        Athlete athlete = Athlete();
-        athleteMap.get(username);
+        Athlete athlete = null;
+        
 
-        if (athlete == null) {
+        while (athlete == null) {
+            athlete = athleteMap.get(username);
             System.out.println("User not found.");
+
             return;
         }
 
