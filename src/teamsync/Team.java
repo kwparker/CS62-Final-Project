@@ -11,19 +11,18 @@ public class Team {
     String teamName;
     Coach coach;
     HashMap<String, Athlete> athleteMap;
-    ArrayList<Athlete> athleteList;
+    ArrayList<Athlete> athletes;
+    
 
-    public Team(String teamName, Coach coach, ArrayList<Athlete> athletes) {  // idk whether or not to pass the athletes in as a list or map
+    public Team(String teamName, Coach coach, HashMap<String, Athlete> athleteMap) {  // idk whether or not to pass the athletes in as a list or map
         this.teamName = teamName.toLowerCase();
-        this.coach = coach;
-        this.athleteList = new ArrayList<>(athletes);
-        this.athleteMap = new HashMap<>();            
-
-        for (Athlete athlete : athletes) {
-            this.athleteMap.put(athlete.getUserName(), athlete);
+        this.coach = coach;         
+        this.athleteMap = athleteMap;
+        
+        for (String user: athleteMap.keySet()) {
+            this.athletes.add(athleteMap.get(user));
         }
 
-        coach.athletes = this.athleteMap;
     }
 
     public String getTeamName() {
@@ -43,11 +42,11 @@ public class Team {
     }
 
     public ArrayList<Athlete> getAthleteList() {
-        return this.athleteList;
+        return this.athletes;
     }
 
     public void setAthleteList(ArrayList<Athlete> athleteList) {
-        this.athleteList = athleteList;
+        this.athletes = athleteList;
     }
 
     public HashMap<String, Athlete> getAthleteMap() {
@@ -63,12 +62,12 @@ public class Team {
     }
 
     public void addAthlete(Athlete athlete, String user) {
-        this.athleteList.add(athlete);
+        this.athletes.add(athlete);
         this.athleteMap.put(user, athlete);
     }
 
     public void removeAthlete(Athlete athlete, String user) {
-        this.athleteList.remove(athlete);
+        this.athletes.remove(athlete);
         this.athleteMap.remove(user);
     }
 
@@ -102,13 +101,13 @@ public class Team {
     }
 
     public int teamSize() {
-        return 1 + this.athleteList.size();
+        return 1 + this.athletes.size();
     }
 
     public ArrayList<String> getAllAthletesUsernames() {
         ArrayList<String> userList = new ArrayList<String>();
 
-        for (Athlete athlete: athleteList) {
+        for (Athlete athlete: athletes) {
             userList.add(athlete.username);
         }
 
@@ -123,7 +122,7 @@ public class Team {
     public void clearSchedules() {
         coach.clearCoachSched();
 
-        for (Athlete athlete: athleteList) {
+        for (Athlete athlete: athletes) {
             athlete.clearAthleteSched();
         }
     }

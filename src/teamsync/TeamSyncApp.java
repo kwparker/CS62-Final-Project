@@ -17,11 +17,17 @@ public class TeamSyncApp {
 
     public Coach coach;
     public HashMap<String, Athlete> athleteMap;
+    public Team testTeam;
     public Scanner scannerIn;
 
     public TeamSyncApp() {
         this.scannerIn = new Scanner(System.in);
         this.athleteMap = new HashMap<String, Athlete>();
+
+
+        this.coach = new Coach("Test coach", "coach123", "Test team", new Schedule(), athleteMap);
+        this.testTeam = new Team("Test team", this.coach, athleteMap);
+        
 
         // add some sort of sample data here so the athletes and coach are here
 
@@ -56,8 +62,11 @@ public class TeamSyncApp {
             }
 
         } catch (IOException e) {
-            System.out.println("File Error");
+            System.out.println("File Error, file not found");
         }
+
+        // Course.main(null); // this should work
+        
         Schedule schedule = new Schedule();
         Athlete athlete1 = new Athlete("athlete1", "athlete11", "Not yet specified", "Not yet specified", schedule, 2027);
         Athlete athlete2 = new Athlete("athlete2", "athlete12", "Not yet specified", "Not yet specified", schedule, 2027);
@@ -94,12 +103,12 @@ public class TeamSyncApp {
         Schedule coachSchedule = new Schedule();
         coach = new Coach("Coach Name", "coach123", "TeamName", coachSchedule, athleteMap);
         
-        while(true)
+        System.out.println("State your team.");
+        String coachTeam = scannerIn.nextLine();
+        coach.setTeam(coachTeam);
+
+        while(true){
             System.out.println("\n*** Coach Menu ***");
-            
-            System.out.println("State your team.");
-            String coachTeam = scannerIn.nextLine();
-            coach.setTeam(coachTeam);
 
             System.out.println("1. View your schedule");
             System.out.println("2. Add event to team");
@@ -113,7 +122,7 @@ public class TeamSyncApp {
 
             if (userChoice.equals("1")) {
                 System.out.println(coach.getCoachSchedule());
-                break;
+
             } else if (userChoice.equals("2")) {
                 Event event = eventFromInput();
                 coach.addEventToTeam(event);
@@ -121,11 +130,12 @@ public class TeamSyncApp {
             } else if (userChoice.equals("3")) {
                 System.out.println("Enter the athlete's username");
                 String user = scannerIn.nextLine();
-                coach.getAthleteSchedule(user);
+                System.out.println(coach.getAthleteSchedule(user));
             } else if (userChoice.equals("4")) {
                 for (Athlete athlete: coach.getAllAthletes()) {
                     athlete.printConflicts();
-                } break;
+                } 
+                
             } else if (userChoice.equals("5")) {
                 System.out.println("Input practice schedule file path"); // should we have a try to make sure this is valid
                 String fileName = scannerIn.nextLine();
@@ -137,7 +147,7 @@ public class TeamSyncApp {
                     try {
                         startDate = LocalDate.parse(date);
                     } catch (DateTimeException e) {
-                        System.out.println("Invalid date. Please use YYYY-MM-DD format.")
+                        System.out.println("Invalid date. Please use YYYY-MM-DD format.");
                     } 
                 }
 
@@ -156,7 +166,7 @@ public class TeamSyncApp {
                 for (Event event: practiceSchedule) {
                     coach.addEventToTeam(event);
                 }
-                
+
             } else if (userChoice.equals("6")) {
                 return;
             } 
@@ -166,6 +176,7 @@ public class TeamSyncApp {
             else {
                 System.out.println("Invalid input. Please choice a number between 1 and 7.");
             }
+        }
     
     }
 
@@ -174,18 +185,49 @@ public class TeamSyncApp {
         String username = scannerIn.nextLine();
 
         Athlete athlete = null;
-        
 
         while (athlete == null) {
-            athlete = athleteMap.get(username);
-            System.out.println("User not found.");
+            if (athleteMap.get(username) != null) {
+                athlete = athleteMap.get(username);
+                break;
+            }
+            
+            System.out.println("User not found. Please enter a username to create an account.");
+            String inputUser = scannerIn.nextLine();
+            System.out.println("Enter your name.");
+            String inputName = scannerIn.nextLine();
+            System.out.println("Enter your team");
+            String inputTeam = scannerIn.nextLine();
+            System.out.println("Enter your major");
+            String inputMajor = scannerIn.nextLine();
 
-            return;
+            
+            int inputGradYear;
+
+            while (true){
+                System.out.println("Enter your grad year");
+                try {
+                    inputGradYear = scannerIn.nextInt();
+                    break;
+                }
+                catch (Exception e){
+                    System.out.println("Invalid grad year. Please enter a graduation year as an integer.");
+                    scannerIn.nextLine();
+                }
+            }
+            
+            scannerIn.nextLine();
+            
+            // Athlete createdAthlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
+            athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
+            athleteMap.put(inputUser, athlete);
+            
+            System.out.println("Account created.");
         }
 
         while (true) {
             System.out.println("\n*** Athlete Menu (" + athlete.getName() + ") ***");
-            System.out.println("1. View schedule");
+            System.out.println("1. View full profile");
             System.out.println("2. View conflicts");
             System.out.println("3. Add event");
             System.out.println("4. Register for courses");
@@ -194,19 +236,27 @@ public class TeamSyncApp {
 
             if (choice.equals("1")){
                 System.out.println(athlete);
-                break;
+                continue;
             }
             else if (choice.equals("2")){
                 athlete.printConflicts();
-                break;
+                continue;
             }
             else if (choice.equals("3")){
                 Event event = eventFromInput();
                 athlete.addEvent(event);
                 System.out.println("Event added.");
-                break;
+                continue;
             }
             else if (choice.equals("4")) {
+                // for event in schedule, if type of event is 1 (academic), remove event
+                Schedule currentSchedule =  athlete.getAthleteSchedule();
+                for (Event event : currentSchedule.getEventsByType(1)) {
+                        athlete.removeEvent(event);
+                } 
+                
+                System.out.println("Previous academic events removed from your schedule.");
+
                 System.out.println("Course filter options");
                 System.out.println("1. Filter by department");
                 System.out.println("2. Filter by athletic schedule");
@@ -216,7 +266,7 @@ public class TeamSyncApp {
 
                 if (input.equals("1")) {
                     System.out.println("Input department prefix");
-                    String dept = scannerIn.nextLine();
+                    String dept = scannerIn.nextLine().toUpperCase();
 
                     ArrayList<Course> filtered = Course.filterByDept(dept);
 
@@ -227,6 +277,7 @@ public class TeamSyncApp {
                         System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
                         try {
                         courseAmount = scannerIn.nextInt();
+                        scannerIn.nextLine();
                         if (courseAmount > 5 || courseAmount < 1){
                             System.out.println("Invalid input. Pick a number between 1 and 5.");
                             courseAmount = 0;
@@ -237,10 +288,16 @@ public class TeamSyncApp {
                         }
                     }
                     
+                    // System.out.println("\n" + filtered);
+                    for (Course course : filtered) {
+                        System.out.println(course);
+                    }
+
+
                     while (coursesEnrolledIn.size() < courseAmount) {
                         int currentSize = coursesEnrolledIn.size();
                         System.out.println("Choose a course section ID to add");
-                        String chosenCourseID = scannerIn.nextLine();
+                        String chosenCourseID = scannerIn.nextLine().toUpperCase();
                         
                         for (Course course: filtered){
                             if (course.getCourseSectionId().equals(chosenCourseID)){
@@ -274,6 +331,7 @@ public class TeamSyncApp {
                         System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
                         try {
                         courseAmount = scannerIn.nextInt();
+                        scannerIn.nextLine();
                         if (courseAmount > 5 || courseAmount < 1){
                             System.out.println("Invalid input. Pick a number between 1 and 5.");
                             courseAmount = 0;
@@ -283,11 +341,15 @@ public class TeamSyncApp {
                             System.out.println("Please pick an integer between 1 and 5.");
                         }
                     }
+
+                    for (Course course : filtered) {
+                        System.out.println(course);
+                    }
                     
                     while (coursesEnrolledIn.size() < courseAmount) {
                         int currentSize = coursesEnrolledIn.size();
                         System.out.println("Choose a course section ID to add");
-                        String chosenCourseID = scannerIn.nextLine();
+                        String chosenCourseID = scannerIn.nextLine().toUpperCase();
                         
                         for (Course course: filtered){
                             if (course.getCourseSectionId().equals(chosenCourseID)){
@@ -312,7 +374,7 @@ public class TeamSyncApp {
                 }
                 else if (input.equals("3")) {
                     System.out.println("Input department prefix");
-                    String dept = scannerIn.nextLine();
+                    String dept = scannerIn.nextLine().toUpperCase();
 
                     ArrayList<Course> filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule());
 
@@ -323,6 +385,7 @@ public class TeamSyncApp {
                         System.out.println("How many courses do you want to want to register for? Pick between 1 and 5.");
                         try {
                         courseAmount = scannerIn.nextInt();
+                        scannerIn.nextLine();
                         if (courseAmount > 5 || courseAmount < 1){
                             System.out.println("Invalid input. Pick a number between 1 and 5.");
                             courseAmount = 0;
@@ -332,11 +395,15 @@ public class TeamSyncApp {
                             System.out.println("Please pick an integer between 1 and 5.");
                         }
                     }
+
+                    for (Course course : filtered) {
+                        System.out.println(course);
+                    }
                     
                     while (coursesEnrolledIn.size() < courseAmount) {
                         int currentSize = coursesEnrolledIn.size();
                         System.out.println("Choose a course section ID to add");
-                        String chosenCourseID = scannerIn.nextLine();
+                        String chosenCourseID = scannerIn.nextLine().toUpperCase();
                         
                         for (Course course: filtered){
                             if (course.getCourseSectionId().equals(chosenCourseID)){
@@ -358,20 +425,21 @@ public class TeamSyncApp {
 
                     System.out.println("Course registration complete.");
                 }
-
+            
             }
             else if (choice.equals("5")){
                 return;
             }
             else{
-                System.out.println("Invalid input. Pick a number between 1 and 4.");
+                System.out.println("Invalid input. Pick a number between 1 and 5.");
             }
-        }
 
+        }
     }
+    
 
     public Event eventFromInput() {
-        System.out.print("Event name:");
+        System.out.print("Event name: ");
         String eventName = scannerIn.nextLine();
 
         System.out.print("Date (YYYY-MM-DD): ");

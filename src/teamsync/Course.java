@@ -171,6 +171,10 @@ public class Course {
     public static ArrayList<Course> filterByDept(String deptPrefix) {
         ArrayList<Course> filtered = new ArrayList();
         for (Course course: allCourses){
+            // Skip if no valid time or meeting days
+            if (course.classBeginningTime.equals("0") || course.classEndingTime.equals("0") || course.classMeetingDays.equals("-------")) {
+                continue;
+            }
             if (course.getCourseSectionId().startsWith(deptPrefix)){
                 filtered.add(course);
             }
@@ -231,16 +235,12 @@ public class Course {
 
 
     public String toString() {
-        return "Course ID: " + courseSectionId +
-               ", Time: " + classBeginningTime + "-" + classEndingTime +
-               ", Days: " + classMeetingDays +
+        return "Course ID: " + courseSectionId + ", Time: " + classBeginningTime + "-" + classEndingTime + ", Days: " + classMeetingDays +
                ", Location: " + room;
     }
 
 
-
     public static void main(String[] args) {
-        
 
         try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
             String line;
@@ -251,7 +251,7 @@ public class Course {
 
             if (line.startsWith("{")) {
                     aCourse = new Course("", "", "", "", "");
-                } 
+                }
                 else if (line.startsWith("\"courseSectionId\"")) {
                     aCourse.setCourseSectionId(getLineValue(line));
                 } 
@@ -275,30 +275,9 @@ public class Course {
         } catch (IOException e) {
             System.out.println("File Error");
         }
+        //System.out.println(allCourses);
+       
 
-        //for (Course courses : allCourses) {
-//
-          //  Event courses.courseSectionId = new <Event>;
-
-        //    System.out.println(courses);
-        //}
-
-
-        // Printing out all courses
-        // for (Course courses : allCourses) {
-        //     System.out.println(courses.classMeetingDays);
-        // }
-
-
-        // Use this line of code to get this to run to populate allCourses:
-        // Course.main(null);
-        // System.out.println("\n=== Testing filterByDept(\"BIOL\") ===");
-        // ArrayList<Course> bioCourses = Course.filterByDept("BIOL");
-        // for (Course c : bioCourses) {
-        //     System.out.println(c);
-        // }
-
-        // Create a schedule with one event to test conflicts
         Schedule testSchedule = new Schedule();
         LocalDate start = LocalDate.of(2024, 8, 26);
         LocalDate end = LocalDate.of(2024, 12, 4);
@@ -315,12 +294,11 @@ public class Course {
             }
         }
         
-        System.out.println("\n*** Testing filterBySchedule(testSchedule) ***");
+        System.out.println("\n Testing filterBySchedule");
         ArrayList<Course> nonConflicting = Course.filterBySchedule(testSchedule);
         for (Course c : nonConflicting) {
             System.out.println(c);
         }
     }
 
-            
 }

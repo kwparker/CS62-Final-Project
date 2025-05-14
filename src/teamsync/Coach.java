@@ -26,6 +26,10 @@ public class Coach {
         this.athletes = athletes;
     }
 
+    public void addAthlete(Athlete athlete){
+        this.athletes.put(athlete.username, athlete);
+    }
+
     public String getName() {
         return name;
     }

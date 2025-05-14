@@ -50,6 +50,10 @@ public class Event implements Comparable<Event> { // since when was this a compa
         return this.startPair.compareTo(otherEvent.startPair);  // uses dateTimePair compare method to indicate which event comes first
     }
 
+    public int getType(){
+        return this.eventType;
+    }
+
     public String toString() {
         StringBuilder output = new StringBuilder();
         output.append(this.startPair.toString() + " - " + this.endPair.toString() + ", " + eventName + " (");
