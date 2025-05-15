@@ -304,7 +304,12 @@ public class Course {
     public static ArrayList<Course> filterByBoth(String deptPrefix, Schedule schedule) {
         ArrayList<Course> filteredCourses = new ArrayList<Course>();
         filteredCourses.addAll(filterByDept(deptPrefix));  // filter by department
-        filteredCourses.addAll(filterBySchedule(schedule)); // filter by schedule
+        for (Course course: filterBySchedule(schedule)) { // for each course in filter by schedule
+            if (!filteredCourses.contains(course)) {  // if course not in filtered courses
+                filteredCourses.add(course);  // add course to filtered courses
+            }
+        }
+        
         return filteredCourses;  // return double filtered course list
         
     }
