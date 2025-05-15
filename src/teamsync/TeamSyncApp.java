@@ -246,11 +246,11 @@ public class TeamSyncApp {
                     }
                 }
 
+                // create the athlete
                 Athlete newAthlete = new Athlete(name, username, team, major, defaultSchedule.clone(), gradYear);
-                athleteMap.put(username, newAthlete);
-                coach.addAthlete(newAthlete);
-
-                System.out.println("\n" + name + " added to your team.");
+                athleteMap.put(username, newAthlete); // add the athlete to the map
+                coach.addAthlete(newAthlete); // add the athlete to coach's tea
+                System.out.println("\n" + name + " added to your team."); // 
             }
             else if (userChoice.equals("8")) {
                 return;
@@ -302,7 +302,6 @@ public class TeamSyncApp {
             
             scannerIn.nextLine();
             
-            // Athlete createdAthlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
             athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, defaultSchedule.clone(), inputGradYear);
             athleteMap.put(inputUser, athlete);  // adds athlete to the athleteM map
             
@@ -317,7 +316,7 @@ public class TeamSyncApp {
             System.out.println("2. View conflicts");
             System.out.println("3. Add event");
             System.out.println("4. Register for courses");
-            System.out.println("5. Back");
+            System.out.println("5. Back to main menu");
             String choice = scannerIn.nextLine();
 
             // prints athlete menu
@@ -402,69 +401,79 @@ public class TeamSyncApp {
 
                         String modeChoice = scannerIn.nextLine();
 
+                        // clears all courses and begins registration
                         if (modeChoice.equals("1")){
                             for (Event event : currentAcademicEvents) {
-                                athlete.removeEvent(event);
+                                athlete.removeEvent(event);  // removes all events
                             }
-                            athlete.getEnrolledCourses().clear();
+                            athlete.getEnrolledCourses().clear();  // clears enrolled courses
                             System.out.println("Academic schedule cleared.");
-                            maxCoursesToAdd = 5;
+                            maxCoursesToAdd = 5;  // ccan only register for 5 courses
                             validInput = true;
                         }
+
+                        // handles course registration building from current schedule
                         else if (modeChoice.equals("2")){
                             while (currentCourseCount >= 5){
-                                System.out.println("You already have 5 academic courses. Remove one in order to add more.");
+                                System.out.println("You already have 5 academic courses. Remove one in order to add more.");  // can't add more than 5 events
                                 System.out.println("Do you want to remove an academic course? (Y/N)");
-                                String response = scannerIn.nextLine().toUpperCase();
+                                String response = scannerIn.nextLine().toUpperCase();  // saves response 
 
                                 if (response.equals("Y")){
+
                                     // printing the courses the athlete is currently enrolled in with the index + 1 number for easy reference
                                     ArrayList<Course> enrolledCourses = athlete.getEnrolledCourses();
                                     System.out.println("Your current academic courses:");
                                     int num = 1;
-                                    for (Course course: enrolledCourses){
+                                    for (Course course: enrolledCourses){ // prints the courses where they are numbered
                                         System.out.println(num + ": " + course);
                                         num++;
                                     }
 
                                     System.out.println("Enter the number of the course you'd like to remove: ");
-                                    String courseRemovalInput = scannerIn.nextLine();
+                                    String courseRemovalInput = scannerIn.nextLine();  // saves course remove index
 
                                     try{
-                                        int removeIndex = Integer.parseInt(courseRemovalInput);
-                                        if (removeIndex >= 1 && removeIndex <= currentAcademicEvents.size()){
-                                            Event toRemove = currentAcademicEvents.get(removeIndex - 1);
-                                            athlete.removeEvent(toRemove);
-                                            System.out.println("Removed course: " + toRemove);
+                                        int removeIndex = Integer.parseInt(courseRemovalInput); // parse the index
+                                        if (removeIndex >= 1 && removeIndex <= currentAcademicEvents.size()){ // make sure valid index
+                                            Event toRemove = currentAcademicEvents.get(removeIndex - 1);  // gets the event to remove
+                                            athlete.removeEvent(toRemove);  // removes event from schedule
+                                            System.out.println("Removed course: " + toRemove); // removed the course
                                         }
                                         else{
                                             System.out.println("Invalid number. No course was removed.");
                                         }
                                     }
-                                    catch (NumberFormatException e){
+                                    catch (NumberFormatException e){ // handle non-numeric inputs
                                         System.out.println("Invalid input. No course was removed.");
                                     }
+
                                     // updates the list and the count after removal
                                     currentAcademicEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(1));
                                     currentCourseCount = currentAcademicEvents.size();
                                 }
-                                else if (response.equals("N")){
+                                else if (response.equals("N")){ // choose not to remove a course
                                     System.out.println("You selected not to remove a course. Now returning to menu.");
-                                    return;
+                                    return; // exit to the previous menu
                                 }
                                 else{
-                                    System.out.println("Invalid response. Please enter Y or N.");
+                                    System.out.println("Invalid response. Please enter Y or N."); // handle invalid inputs
                                 }
                             }
+
                             // here we have fewer than 5 courses enrolled in
-                            maxCoursesToAdd = 5 - currentCourseCount;
-                            System.out.println("You can now add up to: " + maxCoursesToAdd + " more academic course(s).");
-                            validInput = true;  
+                            maxCoursesToAdd = 5 - currentCourseCount;  // computes max courses to add
+                            System.out.println("You can now add up to: " + maxCoursesToAdd + " more academic course(s)."); // allow course additions
+                            validInput = true; // mark true to allow the input to proceed
                         }
-                        else if (modeChoice.equals("3")){
+
+                        // returns to menu
+                        else if (modeChoice.equals("3")){ // chooses to return
                             System.out.println("Returning to menu now.");
-                            break;
+                            break; // exut the current block
                         }
+                        
+                        // handles invalid input
                         else{
                             System.out.println("Invalid input. Please enter 1, 2, or 3.");
                         }
@@ -472,63 +481,64 @@ public class TeamSyncApp {
                 }
 
                 if (!validInput){
-                    continue;
+                    continue; // return to start of loop if input was invalid
                 }
 
+                // prompts filter options for course registration
                 System.out.println("Course filter options");
                 System.out.println("1. Filter by department");
                 System.out.println("2. Filter by athletic schedule");
                 System.out.println("3. Filter by both");
 
-                String filterChoice = scannerIn.nextLine();
+                String filterChoice = scannerIn.nextLine(); // read filter choice
 
-                if (filterChoice.equals("1")) {
+                if (filterChoice.equals("1")) { // chooses to filter by department
 
                     System.out.println("Input department prefix and/or first digits of course number with no space (ex: CSCI1): ");
                     String dept = null;
-                    while (dept == null){
-                        dept = scannerIn.nextLine().toUpperCase();
-                        ArrayList<Course> filtered = Course.filterByDept(dept);
+                    while (dept == null){ // keeps on looping until a valid department prefix
+                        dept = scannerIn.nextLine().toUpperCase(); // read and normalize the input
+                        ArrayList<Course> filtered = Course.filterByDept(dept); // get filtered courses
                         if (filtered.size() == 0) {
                             System.out.println("There are no courses with this prefix. Please try again.");
-                            dept = null;
+                            dept = null; // loop again
                         } else {
-                            courseRegistration(filtered, athlete, maxCoursesToAdd);
+                            courseRegistration(filtered, athlete, maxCoursesToAdd); // now can register for classes
                         }
                     }
 
                 }
-                else if (filterChoice.equals("2")) {
+                else if (filterChoice.equals("2")) { // chooses to filter by conflicts with athletic schedule
 
-                    ArrayList<Course> filtered = Course.filterBySchedule(athlete.getAthleteSchedule());
-                    courseRegistration(filtered, athlete, maxCoursesToAdd);
+                    ArrayList<Course> filtered = Course.filterBySchedule(athlete.getAthleteSchedule()); // flter non-conflicting
+                    courseRegistration(filtered, athlete, maxCoursesToAdd); // now can register for classes
 
                 }
-                else if (filterChoice.equals("3")) {
+                else if (filterChoice.equals("3")) { // chooses to apply both filters
 
-                    System.out.println("Input department prefix");
+                    System.out.println("Input department prefix"); // prompt department
                     ArrayList<Course> filtered = null;
                     String dept = null;
                     while (dept == null){
-                        dept = scannerIn.nextLine().toUpperCase();
-                        filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule());
+                        dept = scannerIn.nextLine().toUpperCase(); // read and nornmalize the input
+                        filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule()); // filter both ways
                         if (filtered.size() == 0) {
-                            System.out.println("There are no courses with this prefix. Please try again.");
-                            dept = null;
+                            System.out.println("There are no courses with this prefix. Please try again."); // no match
+                            dept = null; // repeat loop
                         } else {
-                            courseRegistration(filtered, athlete, maxCoursesToAdd);
+                            courseRegistration(filtered, athlete, maxCoursesToAdd); // now can register for classes
                         }
                     }
                     
                 }
-                else{
-                    System.out.println("Invalid filter option. Now returning to menu.");
+                else{ // if user input is invalid
+                    System.out.println("Invalid filter option. Now returning to athlete menu.");
                 }
             }
-            else if (choice.equals("5")){
+            else if (choice.equals("5")){ // chooses to go back to main menu
                 return;
             }
-            else{
+            else{ // handles invalid inputs
                 System.out.println("Invalid input. Pick a number between 1 and 5.");
             }
 
