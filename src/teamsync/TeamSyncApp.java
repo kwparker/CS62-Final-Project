@@ -17,34 +17,40 @@ import java.util.HashMap;
 
 /**
  * The class TeamSyncApp serves as the central application class for managing a coach and their athletes.
- * Provides CLI-based interactions to add, view, and manage academic and athletic schedules, register for courses, and 
- * register for courses, and handle conflicts.
+ * Provides CLI-based interactions to add, view, and manage academic and athletic schedules, register for courses, and
+ * handle conflicts.
  */
 public class TeamSyncApp {
 
-    Schedule defaultSchedule;
+    Schedule defaultSchedule; // shared default schedule used to clone for new athletes
+    public Coach coach; // the coach user
+    public HashMap<String, Athlete> athleteMap; // maps usernames to athlete objects
+    public Team testTeam; // default test team
+    public Scanner scannerIn; // for CLI input
 
-    public Coach coach;
-    public HashMap<String, Athlete> athleteMap;
-    public Team testTeam;
-    public Scanner scannerIn;
-
+    /**
+     * constructs the TeamSync application, loading default course data from hyperschedule and setting up an initial athlete
+     */
     public TeamSyncApp() {
-        this.scannerIn = new Scanner(System.in);
-        this.athleteMap = new HashMap<String, Athlete>();
-        this.defaultSchedule = new Schedule();
-        this.coach = new Coach("Test coach", "coach123", "Test team", defaultSchedule, athleteMap);
-        this.testTeam = new Team("Test team", this.coach, athleteMap);
+        this.scannerIn = new Scanner(System.in); // initialize scanner
+        this.athleteMap = new HashMap<String, Athlete>(); // initialize athlete 
+        this.defaultSchedule = new Schedule(); // initialize a blank default schedule
+        this.coach = new Coach("Test coach", "coach123", "Test team", defaultSchedule, athleteMap); // create a default coach
+        this.testTeam = new Team("Test team", this.coach, athleteMap); // create a default team
         
-        loadCourseData("Data/course-section-schedule.json");
+        loadCourseData("Data/course-section-schedule.json"); // load course data from file
+        // add a placeholder athlete
         Athlete athlete1 = new Athlete("athlete1", "athlete1", "Not yet specified", "Not yet specified", defaultSchedule.clone(), 2027);
         athleteMap.put("athlete1", athlete1);
     }
 
-
+    /**
+     * starts the main program loop and user type selection menu
+     */
     public void runProgram() {
         System.out.println("Welcome to TeamSync!");
-        while(true) {
+        while(true) { // infinite loop for the CLI
+            // options to choose
             System.out.println("\nLog in as:");
             System.out.println("1. Coach");
             System.out.println("2. Athlete");
@@ -52,29 +58,28 @@ public class TeamSyncApp {
             String userType = scannerIn.nextLine();
 
             if (userType.equals("1")) {
-                runCoach();
+                runCoach(); // launch the coach menu
             } else if (userType.equals("2")) {
-                runAthlete();
+                runAthlete(); // launch the athlete menu
             } else if (userType.equals("3")) {
                 System.out.println("Goodbye! Please come back soon.");
-                return;
+                return; // exit the app
             } else {
-                System.out.println("Invalid input. Please input 1, 2, or 3.");
+                System.out.println("Invalid input. Please input 1, 2, or 3."); // handles an invalid input
             }
         }
     }
 
+    /**
+     * launches the coach-specific menu and handles coach operations
+     */
     public void runCoach() {
-        Schedule coachSchedule = new Schedule();
-        coach = new Coach("Coach Name", "coach123", "TeamName", coachSchedule, athleteMap);
+        Schedule coachSchedule = new Schedule(); // new schedule for this session
+        coach = new Coach("Coach Name", "coach123", "TeamName", coachSchedule, athleteMap); // assign coach object
         
-        // System.out.println("State your team.");
-        // String coachTeam = scannerIn.nextLine();
-        // coach.setTeam(coachTeam);
-
-        while(true){
+        while(true){ // loop for coach menu
+            // options to choose as a coach
             System.out.println("\n*** Coach Menu ***");
-
             System.out.println("1. View your schedule");
             System.out.println("2. Add event to team");
             System.out.println("3. View an athlete's schedule");
@@ -84,66 +89,67 @@ public class TeamSyncApp {
             System.out.println("7. Add an athlete to the team");
             System.out.println("8. Go back");
 
-            String userChoice = scannerIn.nextLine();
+            String userChoice = scannerIn.nextLine(); // read the menu choice
 
-            if (userChoice.equals("1")) {
-                if (coach.getCoachSchedule().isEmpty()){
-                    System.out.println("You currently have no events in your schedule.");
+            if (userChoice.equals("1")) { // to view coach's sc
+                if (coach.getCoachSchedule().isEmpty()){ // checks if the coach has an empty schedule
+                    System.out.println("You currently have no events in your schedule."); // states that coach has empty schedule
                 }
                 else{
-                    System.out.println(coach.getCoachSchedule());
+                    System.out.println(coach.getCoachSchedule()); // show coach schedule
                 }
 
             } else if (userChoice.equals("2")) {
-                Event event = eventFromInput();
-                coach.addEventToTeam(event);
+                Event event = eventFromInput(); // prompts user to create an event
+                coach.addEventToTeam(event); // add to coache and team
                 defaultSchedule.addEvent(event); // to make sure all new athletes will also have this newly added event
                 System.out.println("Event added to athletes and coach.");
-            } else if (userChoice.equals("3")) {
-                while (true) {
+            } else if (userChoice.equals("3")) { // to view an athlete's schedule
+                while (true) { // loop until a valid username is entered or user goes back
                     System.out.println("Enter the athlete's username");
                     String user = scannerIn.nextLine();
 
-                    if (!coach.athletes.containsKey(user)) {
-                        boolean resolved = false;
-                        while(!resolved){
+                    if (!coach.athletes.containsKey(user)) { // if the username doesn't exist
+                        boolean resolved = false; // flag to control the nested loop
+                        while(!resolved){ // keep prompting until resolved
                             System.out.println("Athlete doesn't exist. Select an option below.");
-                            System.out.println("1. Enter a different username");
-                            System.out.println("2. Go back");
+                            System.out.println("1. Enter a different username"); // option to re-enter username
+                            System.out.println("2. Go back"); // option to 
                             String input = scannerIn.nextLine();
     
-                            if (input.equals("1")) {
+                            if (input.equals("1")) { // chooses to re-enter username
                                 resolved = true; // break inner loop, start outer loop
                             } 
-                            else if (input.equals("2")) {
+                            else if (input.equals("2")) { // chooses to go back
                                 return; // back to coach menu
                             } else {
-                                System.out.println("Invalid input. Please input 1 or 2."); // stay in inner loop
+                                System.out.println("Invalid input. Please input 1 or 2."); // prompt again, stay in inner loop
                             }
                         }
-                    } else {
-                        Athlete athlete = coach.athletes.get(user);
+                    } else { // athlete exists
+                        Athlete athlete = coach.athletes.get(user); // retrieve the athlete object
                         System.out.println("Schedule for: " + athlete.getName());
-                        if (athlete.getAthleteSchedule().isEmpty()){
+                        if (athlete.getAthleteSchedule().isEmpty()){ // if the athlete's schedule is empty
                             System.out.println("Schedule is currently empty.");
                         }
-                        else{
-                            System.out.println(athlete.getAthleteSchedule());
+                        else{ // if schedule has events
+                            System.out.println(athlete.getAthleteSchedule()); // print the full schedule
                         }
-                        break;
+                        break; // exit loop
                     }
                 }
-            } else if (userChoice.equals("4")) {
-                for (Athlete athlete: coach.getAllAthletes()) {
-                    athlete.printConflicts();
+            } else if (userChoice.equals("4")) { // chooses to view athlete conflicts
+                for (Athlete athlete: coach.getAllAthletes()) { // loop through all conflicts
+                    athlete.printConflicts(); // print each athlete's co
                 } 
                 
-            } else if (userChoice.equals("5")) {
-                if (!defaultSchedule.isEmpty()) {
+            } else if (userChoice.equals("5")) { // chooses to input or change athletic schedule
+                if (!defaultSchedule.isEmpty()) { // if schedule has events
                     System.out.println("Do you want to clear the current athletic schedule? (Y/N)");
                     String decision = scannerIn.nextLine().toUpperCase();
-                    if (decision.equals("Y")) {
-                        for (Athlete athlete: coach.getAllAthletes()){
+                    if (decision.equals("Y")) { // if yes, clear schedule
+                        for (Athlete athlete: coach.getAllAthletes()){ // loop through athletes
+                            // get athletic events
                             ArrayList<Event> athleticEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(2));
                             
                             for (Event event: athleticEvents){
@@ -254,23 +260,26 @@ public class TeamSyncApp {
         }
     }
 
-    
+    /**
+     * launches the athlete-specific menu and handles athlete operations
+     */
     public void runAthlete() {
         System.out.print("Enter your username: ");
-        String username = scannerIn.nextLine();
+        String username = scannerIn.nextLine();  // gets athlete's username
 
-        Athlete athlete = null;
+        Athlete athlete = null;  // creates null athlete
 
         while (athlete == null) {
-            if (athleteMap.get(username) != null) {
-                athlete = athleteMap.get(username);
+            if (athleteMap.get(username) != null) {  // if athlete already exists
+                athlete = athleteMap.get(username);  // gets the athlete
                 break;
             }
             
+            // if username not ffo
             System.out.println("User not found. Please enter a username to create an account.");
-            String inputUser = scannerIn.nextLine();
+            String inputUser = scannerIn.nextLine(); // saves athlete username
             System.out.println("Enter your name.");
-            String inputName = scannerIn.nextLine();
+            String inputName = scannerIn.nextLine(); // saves athlete name
             System.out.println("Enter your team");
             String inputTeam = scannerIn.nextLine();
             System.out.println("Enter your major");
@@ -505,23 +514,22 @@ public class TeamSyncApp {
 
         }
     }
-    
 
-    // if you have no academic courses, you shouldn't even see the first option asking clear all academic courses, it would just say
-    // like 1 to register and 2 to go back, and then once you added a class you will see the 1-3 options of clearing, editing, going back
-    // 
-
+    /**
+     * Converts inputs into an event object
+     * @return event representation of inputs
+     */
     public Event eventFromInput() {
         System.out.print("Event name: ");
-        String eventName = scannerIn.nextLine();
+        String eventName = scannerIn.nextLine(); // gets name of event
 
         System.out.print("Date (YYYY-MM-DD): ");
         LocalDate date = null;
         while (date == null) {
             try {
-                date = LocalDate.parse(scannerIn.nextLine());
+                date = LocalDate.parse(scannerIn.nextLine()); // gets date if format is valid
             } catch (DateTimeParseException e) {
-                System.out.println("Please enter date with format YYYY-MM-DD");
+                System.out.println("Please enter date with format YYYY-MM-DD");  // prompts to input again if wrong format
             }
         }
         
@@ -529,9 +537,9 @@ public class TeamSyncApp {
         System.out.print("Start time (HH:MM): ");
         while(start == null) {
             try {
-                start = LocalTime.parse(scannerIn.nextLine());
+                start = LocalTime.parse(scannerIn.nextLine());  // gets start time if format is valid
             } catch (DateTimeParseException e) {
-                System.out.println("Please enter time w/ format HH:MM");
+                System.out.println("Please enter time w/ format HH:MM");  // prompts to input again if wrong format
             }
         }
     
@@ -539,13 +547,13 @@ public class TeamSyncApp {
         System.out.print("End time (HH:MM): ");
         while (end == null) {
             try {
-                end = LocalTime.parse(scannerIn.nextLine());
+                end = LocalTime.parse(scannerIn.nextLine());  // gets end time if format is valid
                 if (end.isBefore(start) || end.equals(start)) {
-                    System.out.println("Please enter an time that is after the start time");
+                    System.out.println("Please enter an time that is after the start time");  // enter again if start time after end time
                     end = null;
                 }
             } catch (DateTimeParseException e) {
-                System.out.println("Please enter time w/ format HH:MM");
+                System.out.println("Please enter time w/ format HH:MM");  // enter again if wrong format
             }
         }
 
@@ -553,114 +561,122 @@ public class TeamSyncApp {
         System.out.print("Event type (1 = Academic, 2 = Athletic, 3 = Other): ");
         while (type == 0) {
             try {
-                type = Integer.parseInt(scannerIn.nextLine());
-                if (type != 1 && type != 2 && type !=3) {
+                type = Integer.parseInt(scannerIn.nextLine());  // saves type of event
+                if (type != 1 && type != 2 && type !=3) {  // checks that type is valid
                     type = 0;
                     System.out.println("Please enter a 1, 2, or 3.");
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {  // catches non-integer input
                 System.out.println("Please enter a 1, 2, or 3.");
             }
             
         }
 
         System.out.print("Extra info (e.g., location): ");
-        String info = scannerIn.nextLine();
+        String info = scannerIn.nextLine();  // collects e xtra information
 
-        return new Event(new dateTimePair(date, start), new dateTimePair(date, end), eventName, type, info);
+        return new Event(new dateTimePair(date, start), new dateTimePair(date, end), eventName, type, info);  // returns event from inputs
     }
 
-
+    /**
+     * 
+     * @param filtered filtered list of courses
+     * @param athlete athlete registering for courses
+     * @param maxCourses max number of courses to register for
+     */
     public void courseRegistration(ArrayList<Course> filtered, Athlete athlete, int maxCourses) {
-        ArrayList<Course> coursesEnrolledIn = new ArrayList<>();   
+        ArrayList<Course> coursesEnrolledIn = new ArrayList<>(); // list of courses enrolled in
         int courseAmount = 0;
         
         while (courseAmount == 0) {
-            int numCoursesToEnroll = 5 - athlete.enrolledCourses.size();
+            int numCoursesToEnroll = 5 - athlete.enrolledCourses.size();  // computes number of courses athlete can enroll in
             System.out.println("How many courses do you want to want to register for? Pick between 1 and " + numCoursesToEnroll + ".");
             try {
-                courseAmount = scannerIn.nextInt();
+                courseAmount = scannerIn.nextInt();  // parses input
                 scannerIn.nextLine();
-                if (courseAmount > maxCourses || courseAmount < 1){
+                if (courseAmount > maxCourses || courseAmount < 1){  // if input is invalid
                     System.out.println("Invalid input. Pick a number between 1 and " + numCoursesToEnroll + ".");
-                    courseAmount = 0;
+                    courseAmount = 0;  // resets courseAmount to 0
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Please pick an integer between 1 and " + numCoursesToEnroll + ".");
+            } catch (InputMismatchException e) {  // catches InputMismatchExcpetion
+                System.out.println("Please pick an integer between 1 and " + numCoursesToEnroll + "."); 
                 scannerIn.nextLine(); // clear bad input
             }
         }
     
-        StringBuilder coursePrint = new StringBuilder();
+        StringBuilder coursePrint = new StringBuilder();  // creates string builder
         int index = 1;
-        for (Course course : filtered) {
-            coursePrint.append(index + ": ");
-            coursePrint.append(course + "\n");
+        for (Course course : filtered) {  // for each course in filtered list of courses
+            coursePrint.append(index + ": ");  // adds course index
+            coursePrint.append(course + "\n");  // adds course object
             index++;
         }
 
-        System.out.println(coursePrint.toString());
+        System.out.println(coursePrint.toString());  // prints courses
 
-        while (coursesEnrolledIn.size() < courseAmount) {
+        while (coursesEnrolledIn.size() < courseAmount) {  // while user still needs to register for courses 
 
             int courseNumber = 0;
             System.out.println("Input number next to course you want to add");
             while (courseNumber == 0) {
-            
                 try {
-                    courseNumber = scannerIn.nextInt();
+                    courseNumber = scannerIn.nextInt();  // gets index of course to add
                     scannerIn.nextLine();
-                    if (courseNumber > filtered.size() || courseNumber < 1) {
+                    if (courseNumber > filtered.size() || courseNumber < 1) {  // if invalid input
                         System.out.println("Invalid input. Please choose the number next to the course you want");
                         courseNumber = 0;
-                    } else if (athlete.enrolledCourses.contains(filtered.get(courseNumber - 1))) {
+                    } else if (athlete.enrolledCourses.contains(filtered.get(courseNumber - 1))) {  // if course is already in schedule
                         System.out.println("Course already in schedule. Please choose a different one.");
                         courseNumber = 0;
                     }
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException e) {  // catches error
                     System.out.println("Please enter a number next to a course");
                     scannerIn.nextLine(); // clear the previous input
                     courseNumber = 0;
                 }
             }
             
-            Course course = filtered.get(courseNumber - 1);
-            coursesEnrolledIn.add(course);
+            Course course = filtered.get(courseNumber - 1);  // gets course to add from filtered list
+            coursesEnrolledIn.add(course);  // adds course to courses enrolled in
 
             System.out.println("Enrolled in:\n " + course);
         }
 
-        for (Course course: coursesEnrolledIn) {
+        for (Course course: coursesEnrolledIn) {  // enroll athlete in desired courses
             athlete.enrollCourse(course);
         }
 
         System.out.println("Course registration complete.");
     }
 
+    /**
+     * loads course data from the the Fall 2024 5c course information
+     * @param filePath inputted file path
+     */
     public void loadCourseData(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Data/course-section-schedule.json"))) {   // try reading the path
             String line;
             Course aCourse = null;
 
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
+            while ((line = reader.readLine()) != null) {  // while the line is not null
+                line = line.trim();  // trims the line
 
                 if (line.startsWith("{")) {
-                    aCourse = new Course("", "", "", "", "");
+                    aCourse = new Course("", "", "", "", "");  // new blank course
                 } 
-                else if (line.startsWith("\"courseSectionId\"")) {
+                else if (line.startsWith("\"courseSectionId\"")) {  // parses course section ID
                     aCourse.setCourseSectionId(Course.getLineValue(line));
                 } 
-                else if (line.startsWith("\"classBeginningTime\"")) {
+                else if (line.startsWith("\"classBeginningTime\"")) {  // parses course beginning time
                     aCourse.setClassBeginningTime(Course.getLineValue(line));
                 } 
-                else if (line.startsWith("\"classEndingTime\"")) {
+                else if (line.startsWith("\"classEndingTime\"")) {  // parses course ending time
                     aCourse.setClassEndingTime(Course.getLineValue(line));
-                } 
-                else if (line.startsWith("\"classMeetingDays\"")) {
+                }
+                else if (line.startsWith("\"classMeetingDays\"")) {  // parses course meeting days
                     aCourse.setClassMeetingDays(Course.getLineValue(line));
                 } 
-                else if (line.startsWith("\"instructionSiteName\"")) {
+                else if (line.startsWith("\"instructionSiteName\"")) {  // parses meeting location
                     aCourse.setInstructionSiteName(Course.getLineValue(line));
                 } 
                 else if (line.startsWith("}")) {
@@ -668,7 +684,7 @@ public class TeamSyncApp {
                 }
             }
 
-        } catch (IOException e) {
+        } catch (IOException e) {  // error if file's not found
                 System.out.println("File Error, file not found");
             }
     }

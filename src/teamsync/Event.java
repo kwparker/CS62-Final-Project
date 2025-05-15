@@ -120,8 +120,10 @@ public class Event implements Comparable<Event> { // since when was this a compa
     @Override
     public String toString() {
         StringBuilder output = new StringBuilder();
+        
         // append start and end date/time and the event name
         output.append(this.startPair.toString() + " - " + this.endPair.toString() + ", " + eventName + " (");
+        
         // append type lables and words
         if (this.eventType == 1) {
             output.append("Academic);");
