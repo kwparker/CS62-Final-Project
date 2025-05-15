@@ -1,6 +1,6 @@
 # CS62-Final-Project: TeamSync
 ## Project Overiew
-> This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number. 
+>This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number. 
 
 ### External Libraries
 We did rely on external libraries for the development of this program.
@@ -143,7 +143,7 @@ An athlete adds a new event that overlaps with a class. The program is able to d
 
 <img src="https://github.com/user-attachments/assets/44320d26-5197-45dd-bfa2-ac6e919c68bb" width="600" alt="Athlete profile and full semester schedule" />
 
-The athlete can view their full profile and semester schedule.
+The athlete can view their full profile and semester schedule. The image cuts off part of the athlete's schedule for the whole semester.
 
 ---
 
