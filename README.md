@@ -78,4 +78,6 @@ Below is a summary of some of the public methods and constructors for the major 
 
 ---
 ## Running the code
+<img width="111" alt="PNG image" src="https://github.com/user-attachments/assets/08c6643c-cfb5-4f24-a640-f11883ed6eef" />
+
 
