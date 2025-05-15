@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -366,6 +367,7 @@ public class TeamSyncApp {
                             for (Event event : currentAcademicEvents) {
                                 athlete.removeEvent(event);
                             }
+                            athlete.getEnrolledCourses().clear();
                             System.out.println("Academic schedule cleared.");
                             maxCoursesToAdd = 5;
                             validInput = true;
@@ -444,9 +446,17 @@ public class TeamSyncApp {
                 if (filterChoice.equals("1")) {
 
                     System.out.println("Input department prefix");
-                    String dept = scannerIn.nextLine().toUpperCase();
-                    ArrayList<Course> filtered = Course.filterByDept(dept);
-                    courseRegistration(filtered, athlete, maxCoursesToAdd);
+                    String dept = null;
+                    while (dept == null){
+                        dept = scannerIn.nextLine().toUpperCase();
+                        ArrayList<Course> filtered = Course.filterByDept(dept);
+                        if (filtered.size() == 0) {
+                            System.out.println("There are no courses with this prefix. Please try again.");
+                            dept = null;
+                        } else {
+                            courseRegistration(filtered, athlete, maxCoursesToAdd);
+                        }
+                    }
 
                 }
                 else if (filterChoice.equals("2")) {
@@ -458,9 +468,18 @@ public class TeamSyncApp {
                 else if (filterChoice.equals("3")) {
 
                     System.out.println("Input department prefix");
-                    String dept = scannerIn.nextLine().toUpperCase();
-                    ArrayList<Course> filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule());
-                    courseRegistration(filtered, athlete, maxCoursesToAdd);
+                    ArrayList<Course> filtered = null;
+                    String dept = null;
+                    while (dept == null){
+                        dept = scannerIn.nextLine().toUpperCase();
+                        filtered = Course.filterByBoth(dept, athlete.getAthleteSchedule());
+                        if (filtered.size() == 0) {
+                            System.out.println("There are no courses with this prefix. Please try again.");
+                            dept = null;
+                        } else {
+                            courseRegistration(filtered, athlete, maxCoursesToAdd);
+                        }
+                    }
                     
                 }
                 else{
@@ -487,16 +506,53 @@ public class TeamSyncApp {
         String eventName = scannerIn.nextLine();
 
         System.out.print("Date (YYYY-MM-DD): ");
-        LocalDate date = LocalDate.parse(scannerIn.nextLine());
-
+        LocalDate date = null;
+        while (date == null) {
+            try {
+                date = LocalDate.parse(scannerIn.nextLine());
+            } catch (DateTimeParseException e) {
+                System.out.println("Please enter date with format YYYY-MM-DD");
+            }
+        }
+        
+        LocalTime start = null;
         System.out.print("Start time (HH:MM): ");
-        LocalTime start = LocalTime.parse(scannerIn.nextLine());
-
+        while(start == null) {
+            try {
+                start = LocalTime.parse(scannerIn.nextLine());
+            } catch (DateTimeParseException e) {
+                System.out.println("Please enter time w/ format HH:MM");
+            }
+        }
+    
+        LocalTime end = null;
         System.out.print("End time (HH:MM): ");
-        LocalTime end = LocalTime.parse(scannerIn.nextLine());
+        while (end == null) {
+            try {
+                end = LocalTime.parse(scannerIn.nextLine());
+                if (end.isBefore(start) || end.equals(start)) {
+                    System.out.println("Please enter an time that is after the start time");
+                    end = null;
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("Please enter time w/ format HH:MM");
+            }
+        }
 
+        int type = 0;
         System.out.print("Event type (1 = Academic, 2 = Athletic, 3 = Other): ");
-        int type = Integer.parseInt(scannerIn.nextLine());
+        while (type == 0) {
+            try {
+                type = Integer.parseInt(scannerIn.nextLine());
+                if (type != 1 && type != 2 && type !=3) {
+                    type = 0;
+                    System.out.println("Please enter a 1, 2, or 3.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a 1, 2, or 3.");
+            }
+            
+        }
 
         System.out.print("Extra info (e.g., location): ");
         String info = scannerIn.nextLine();
@@ -538,8 +594,8 @@ public class TeamSyncApp {
         while (coursesEnrolledIn.size() < courseAmount) {
 
             int courseNumber = 0;
+            System.out.println("Input number next to course you want to add");
             while (courseNumber == 0) {
-                System.out.println("Input number next to course you want to add");
             
                 try {
                     courseNumber = scannerIn.nextInt();
@@ -547,9 +603,14 @@ public class TeamSyncApp {
                     if (courseNumber > filtered.size() || courseNumber < 1) {
                         System.out.println("Invalid input. Please choose the number next to the course you want");
                         courseNumber = 0;
+                    } else if (athlete.enrolledCourses.contains(filtered.get(courseNumber - 1))) {
+                        System.out.println("Course already in schedule. Please choose a different one.");
+                        courseNumber = 0;
                     }
                 } catch (InputMismatchException e) {
                     System.out.println("Please enter a number next to a course");
+                    scannerIn.nextLine(); // clear the previous input
+                    courseNumber = 0;
                 }
             }
             

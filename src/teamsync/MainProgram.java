@@ -22,6 +22,10 @@ public class MainProgram{
 
 // add option to filter courses by 
 
+// should we check that end time is after start time?
+
+// we can't have multiday events
+
 
 
 
