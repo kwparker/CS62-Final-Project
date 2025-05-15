@@ -115,10 +115,6 @@ If the username is not found, you'll be prompted to create an account. This regi
 
 <img src="https://github.com/user-attachments/assets/a1868b92-34fd-4193-aab8-24fa9f44c445" width="600" alt="Course filter options" />
 
-Athletes can register for courses by filtering:
-- by department
-- by their practice schedule
-- or both
 
 Athletes can register for courses by filtering by academic department, the coach-inputted athletic schedule, or both. This allows for the viewing of classes based on input parameters.
 
