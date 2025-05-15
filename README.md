@@ -2,14 +2,6 @@
 ## Project Overview
 >This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number.
 
-## Table of Contents
-- [Project Overview](#project-overview)
-- [Public API](#public-api)
-- [Running the Code](#running-the-code)
-- [Final Note and Future Improvements](#final-note-and-future-improvements)
-- [Authors](#authors)
-
-
 ### External Libraries
 We did rely on external libraries for the development of this program.
 
