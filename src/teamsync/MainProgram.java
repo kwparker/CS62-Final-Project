@@ -16,9 +16,6 @@ public class MainProgram{
 // if there are no courses enrolled in, don't show option to clear schedule, should only be like
 
 
-// give option for coach to view roster (Name and grad year)
-
-// give option for coach to add an athlete?
 
 // add option to filter courses by 
 

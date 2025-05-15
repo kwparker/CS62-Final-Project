@@ -132,6 +132,16 @@ public class Schedule implements ScheduleInterface {
         return null; // no upcoming events
     }
 
+    public Schedule clone() {
+        Schedule clonedSchedule = new Schedule();
+        for (Event event : this.schedule) {
+            clonedSchedule.addEvent(new Event(new dateTimePair(event.getStart().date, event.getStart().time),
+                    new dateTimePair(event.getEnd().date, event.getEnd().time), event.getName(), event.getType(), event.getExtraInfo()));
+        }
+        return clonedSchedule;
+    }
+    
+
     public String toString() {
         StringBuilder output = new StringBuilder();
         for (Event event: schedule) {

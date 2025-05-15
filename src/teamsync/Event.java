@@ -54,6 +54,22 @@ public class Event implements Comparable<Event> { // since when was this a compa
         return this.eventType;
     }
 
+    public dateTimePair getStart() {
+        return this.startPair;
+    }
+    
+    public dateTimePair getEnd() {
+        return this.endPair;
+    }
+    
+    public String getName() {
+        return this.eventName;
+    }
+    
+    public String getExtraInfo() {
+        return this.info;
+    }
+    
     public String toString() {
         StringBuilder output = new StringBuilder();
         output.append(this.startPair.toString() + " - " + this.endPair.toString() + ", " + eventName + " (");

@@ -32,7 +32,7 @@ public class TeamSyncApp {
         this.testTeam = new Team("Test team", this.coach, athleteMap);
         
         loadCourseData("Data/course-section-schedule.json");
-        Athlete athlete1 = new Athlete("athlete1", "athlete1", "Not yet specified", "Not yet specified", defaultSchedule, 2027);
+        Athlete athlete1 = new Athlete("athlete1", "athlete1", "Not yet specified", "Not yet specified", defaultSchedule.clone(), 2027);
         athleteMap.put("athlete1", athlete1);
     }
 
@@ -82,47 +82,52 @@ public class TeamSyncApp {
             String userChoice = scannerIn.nextLine();
 
             if (userChoice.equals("1")) {
-                System.out.println(coach.getCoachSchedule());
+                if (coach.getCoachSchedule().isEmpty()){
+                    System.out.println("You currently have no events in your schedule.");
+                }
+                else{
+                    System.out.println(coach.getCoachSchedule());
+                }
 
             } else if (userChoice.equals("2")) {
                 Event event = eventFromInput();
                 coach.addEventToTeam(event);
+                defaultSchedule.addEvent(event); // to make sure all new athletes will also have this newly added event
                 System.out.println("Event added to athletes and coach.");
             } else if (userChoice.equals("3")) {
-                Schedule athleteSchedule = null;
-                Athlete desiredAthlete = null;
-
-                while (desiredAthlete == null) {
-
+                while (true) {
                     System.out.println("Enter the athlete's username");
                     String user = scannerIn.nextLine();
 
-                    if (coach.athletes.get(user) == null) {
-                        desiredAthlete = coach.athletes.get(user);
-                        System.out.println("Athlete doesn't exist. Select an option below.");
-                        System.out.println("1. Enter a different username");
-                        System.out.println("2. Go back");
-                        String input = scannerIn.nextLine();
-
-                        if (input.equals("1")) {
-                            desiredAthlete = coach.athletes.get(user);
-                            // athleteSchedule = coach.getAthleteSchedule(user);
-                        } 
-                        else if (input.equals("2")) {
-                            return;
-                        } else {
-                            System.out.println("Invalid input. Please input 1 or 2.");
-                            desiredAthlete = coach.athletes.get(user);
+                    if (!coach.athletes.containsKey(user)) {
+                        boolean resolved = false;
+                        while(!resolved){
+                            System.out.println("Athlete doesn't exist. Select an option below.");
+                            System.out.println("1. Enter a different username");
+                            System.out.println("2. Go back");
+                            String input = scannerIn.nextLine();
+    
+                            if (input.equals("1")) {
+                                resolved = true; // break inner loop, start outer loop
+                            } 
+                            else if (input.equals("2")) {
+                                return; // back to coach menu
+                            } else {
+                                System.out.println("Invalid input. Please input 1 or 2."); // stay in inner loop
+                            }
                         }
-                        
                     } else {
-                        athleteSchedule = coach.getAthleteSchedule(user);
-                        desiredAthlete = coach.athletes.get(user);
+                        Athlete athlete = coach.athletes.get(user);
+                        System.out.println("Schedule for: " + athlete.getName());
+                        if (athlete.getAthleteSchedule().isEmpty()){
+                            System.out.println("Schedule is currently empty.");
+                        }
+                        else{
+                            System.out.println(athlete.getAthleteSchedule());
+                        }
+                        break;
                     }
                 }
-                System.out.println("Schedule for: " + desiredAthlete.getName());
-                System.out.println(athleteSchedule);
-
             } else if (userChoice.equals("4")) {
                 for (Athlete athlete: coach.getAllAthletes()) {
                     athlete.printConflicts();
@@ -229,7 +234,7 @@ public class TeamSyncApp {
                     }
                 }
 
-                Athlete newAthlete = new Athlete(name, username, team, major, defaultSchedule, gradYear);
+                Athlete newAthlete = new Athlete(name, username, team, major, defaultSchedule.clone(), gradYear);
                 athleteMap.put(username, newAthlete);
                 coach.addAthlete(newAthlete);
 
