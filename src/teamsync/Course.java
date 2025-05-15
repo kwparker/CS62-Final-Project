@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Set;
 import java.time.format.DateTimeFormatter;
 
-// Puts the data from the course section schedule json into an arraylist and creates methods that converts a course to an event
-
 /**
  * Represents a course and allows courses to be converted into events
  * Has methods to parse json file to read 5c course data and generate 
  * full semester course dates
+ * 
+ * @author Guy Fuchs, Kai Parker, Tiernan Colby
  */
 public class Course {
     

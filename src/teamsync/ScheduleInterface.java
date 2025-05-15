@@ -1,7 +1,11 @@
 package teamsync;
 
 import java.util.ArrayList;
-
+/**
+ * This interface provides the methods to create a schedule object
+ * 
+ * @author Kai Parker, Guy Fuchs, Tiernan Colby
+ */
 public interface ScheduleInterface {
     
     // add an event to the schedule
