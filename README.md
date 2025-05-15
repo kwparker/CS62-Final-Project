@@ -79,5 +79,34 @@ Below is a summary of some of the public methods and constructors for the major 
 ---
 ## Running the code
 <img width="111" alt="PNG image" src="https://github.com/user-attachments/assets/08c6643c-cfb5-4f24-a640-f11883ed6eef" /> Run MainProgram to see this starting menu.
+<img width="272" alt="PNG image" src="https://github.com/user-attachments/assets/8e750c93-14e1-4e27-a841-a79a67bab87d" /> Logging in as the coach. You can choose any of the options. For example, I will input an athletic schedule. 
+
+<img width="470" alt="PNG image" src="https://github.com/user-attachments/assets/8e529894-4c17-44b6-9827-a738bf3feb57" /> After inputting an athletic schedule found in the data folder of this repo, you will be brought back to the menu. All the current athletes and any newly added athletes will have this schedule automatically added to their personal schedule.
+
+Now we will go back and log in as an athlete.
+<img width="450" alt="PNG image" src="https://github.com/user-attachments/assets/60ea2509-7898-474f-aab1-cac05e562cdf" /> If the username does not exist, you will be prompted to register as seen in this photo. Enter your information and your account will be created and you will be added to the coach's team. This is the skeleton of the role-based access feature, where you have a different option menu with different features depending on whether you are an athlete or a coach.
+
+Now we will register for courses to demonstrate course registration and viewing classes based on input parameters. When registering for courses, you will be prompted to pick a filter option. In this demonstration, we filter by both academic department and the athletic practice schedule.
+<img width="546" alt="PNG image" src="https://github.com/user-attachments/assets/a1868b92-34fd-4193-aab8-24fa9f44c445" />
+
+At the top of the list of classes will be the courses filtered by department, and then the courses filtered by schedule will show up. Select the number to the left of the course to add it to your schedule.
+
+<img width="758" alt="PNG image" src="https://github.com/user-attachments/assets/051638b0-8737-4b99-b8d5-e9410c79afe8" />
+<img width="679" alt="PNG image" src="https://github.com/user-attachments/assets/23eb59c9-be72-4052-896c-a29705a16c66" />
+
+There are no conflicts in the current schedule because we filtered courses by the coach-inputted practice schedule, so there will be guaranteed to have no conflicts. Now, we will add a different event as an athlete to our personal schedule to demonstrate the conflict detection feature. After inputting the event, we can view the conflict.
+
+<img width="530" alt="PNG image" src="https://github.com/user-attachments/assets/a1494585-8363-49a9-80de-789acb7fdd7b" />
+
+Now we can view our full profile with all of our events for the semester (the image does not show all the events).
+<img width="570" alt="PNG image" src="https://github.com/user-attachments/assets/44320d26-5197-45dd-bfa2-ac6e919c68bb" />
+
+If we return to the coach profile, we can view all the athletes' conflicts if/when they have one. In this case, the autopopulated athlete1 does not have a conflict, so we will only see Guy's conflicts. 
+<img width="514" alt="PNG image" src="https://github.com/user-attachments/assets/33fa7115-514a-4107-97de-8d3e84055ba4" />
+There are also some small features, such as viewing the athlete roster as seen at the bottom of the image, that are fun to explore!
+
+There are many other features and pathways to visit when running this program. Hope you enjoy!
+
+## Future work
 
 
