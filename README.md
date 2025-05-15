@@ -1,6 +1,15 @@
 # CS62-Final-Project: TeamSync
-## Project Overiew
->This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number. 
+## Project Overview
+>This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number.
+
+## Table of Contents
+- [Project Overview](#project-overview)
+- [External Libraries](#external-libraries)
+- [Public API](#public-api)
+- [Running the Code](#running-the-code)
+- [Final Note and Future Improvements](#final-note-and-future-improvements)
+- [Authors](#authors)
+
 
 ### External Libraries
 We did rely on external libraries for the development of this program.
@@ -162,9 +171,9 @@ The coach can view all team conflicts. In this example, only "Guy" has a conflic
 
 ---
 
-### Final Note and Future work
+### Final Note and Future Improvements
 
-In the future, we want to expand this program to allow for multiple teams or even univeristies. Additionally, we there are many methods written in the source code that were not used when writing the main program. These additional methods would allow for a more extensive application and provide many additional features for the users. Some of these methods include, but are not limited to, a coach adding an event to a single athlete's schedule and removing an event from a schedule.
+In the future, we want to expand this program to allow for multiple teams or even universities. Additionally, there are many methods written in the source code that were not used when writing the main program. These additional methods would allow for a more extensive application and provide many additional features for the users. Some of these methods include, but are not limited to, a coach adding an event to a single athlete's schedule and removing an event from a schedule.
 
 For now though, we hope you enjoy what we have built. Have fun navigating TeamSync!
 
