@@ -76,3 +76,6 @@ Below is a summary of some of the public methods and constructors for the major 
 | `boolean equals(Object other)` | Checks equality of two dateTimePairs. | `pair1.equals(pair2)` |
 | `String toString()` | String format `<date, time>`. | `System.out.println(pair)` |
 
+---
+## Running the code
+
