@@ -15,6 +15,11 @@ import java.util.Scanner;
 import java.util.HashMap;
 
 
+/**
+ * The class TeamSyncApp serves as the central application class for managing a coach and their athletes.
+ * Provides CLI-based interactions to add, view, and manage academic and athletic schedules, register for courses, and 
+ * register for courses, and handle conflicts.
+ */
 public class TeamSyncApp {
 
     Schedule defaultSchedule;

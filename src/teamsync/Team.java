@@ -7,6 +7,8 @@ import java.util.HashMap;
 /**
  * Class that combines coach and their athletes into the same object
  * 
+ * THIS CLASS IS NOT USED IN THE MAIN PROGRAM
+ * 
  * @author Kai Parker, Guy Fuchs, Tiernan Colby
  */
 public class Team {
@@ -158,8 +160,8 @@ public class Team {
     }
 
     /**
-     * gets a map of the athletes with conflicts
-     * @return a map of athletes with conflicts
+     * gets a map of the conflicts athletes have
+     * @return a map of the conflicts for athletes with conflicts
      */
     public HashMap<String, ArrayList<ArrayList<Event>>> getAllAthleteConflicts() {
         return coach.getAllConflicts();
@@ -175,68 +177,62 @@ public class Team {
     }
 
     /**
-     * 
-     * @return
+     * gets list of athletes with conflicts
+     * @return list of athletes with conflicts
      */
-    public ArrayList<String> getAthletesWithConflicts() {  // should we return a set or convert to an ArrayList
+    public ArrayList<String> getAthletesWithConflicts() {
         return coach.getAthletesWithConflicts();
-        
     }
 
     /**
-     * 
-     * @return
+     * Get the size of team
+     * @return the size of the team
      */
     public int teamSize() {
         return 1 + this.athletes.size();
     }
 
     /**
-     * 
-     * @return
+     * gets list of the usernames of all athletes on the team
+     * @return array list of the athletes' usernames
      */
     public ArrayList<String> getAllAthletesUsernames() {
-        ArrayList<String> userList = new ArrayList<String>();
+        ArrayList<String> userList = new ArrayList<String>();  // list of usernames
 
-        for (Athlete athlete: athletes) {
-            userList.add(athlete.username);
+        for (Athlete athlete: athletes) {  // for each athlete 
+            userList.add(athlete.username); // add username to list
         }
 
-        return userList;
+        return userList;  // return list of usernames
     }
 
     /**
-     * 
-     * @return
+     * gets username of coach
+     * @return username of coach
      */
     public String getCoachUsername() {
         return coach.username;
     }
     
-    // is this gonna properly update schedules?
+    /**
+     * clear the team's schedule
+     */
     public void clearSchedules() {
-        coach.clearCoachSched();
+        coach.clearCoachSched();  // clear's coaches schedule
 
-        for (Athlete athlete: athletes) {
-            athlete.clearAthleteSched();
+        for (Athlete athlete: athletes) {  // for every athlete in athletes
+            athlete.clearAthleteSched();  // clear athlete's schedule
         }
     }
 
     /**
-     * 
-     * @param practiceSchedule
+     * adds the practice schedule to the team
+     * @param practiceSchedule practice schedule for the team
      */
     public void addPracticeSchedule(Schedule practiceSchedule) {
         for (Event event: practiceSchedule.getSchedule()) {
             this.addEventToTeam(event);
         }
-    }
-
-    /**
-     * 
-     */
-    public String toString() {
-        return null;
     }
 
 } 
