@@ -116,7 +116,7 @@ If the username is not found, you'll be prompted to create an account. This regi
 <img src="https://github.com/user-attachments/assets/a1868b92-34fd-4193-aab8-24fa9f44c445" width="600" alt="Course filter options" />
 
 
-Athletes can register for courses by filtering by academic department, the coach-inputted athletic schedule, or both. This allows for the viewing of classes based on input parameters.
+Athletes can register for courses by filtering by academic department, the coach-inputted athletic schedule, or both. In this case, the athlete filters by both. This allows for the viewing of classes based on input parameters.
 
 ---
 
@@ -125,7 +125,7 @@ Athletes can register for courses by filtering by academic department, the coach
 <img src="https://github.com/user-attachments/assets/051638b0-8737-4b99-b8d5-e9410c79afe8" width="700" alt="Course list displayed for registration" />
 <img src="https://github.com/user-attachments/assets/23eb59c9-be72-4052-896c-a29705a16c66" width="650" alt="Courses successfully added" />
 
-Select courses by entering the number shown next to each listing. Courses are added to the athlete's schedule instantly.
+Select courses by entering the number shown next to each listing. Courses are added to the athlete's schedule instantly. The image of courses above shows only a small portion of the courses that will show up when using this feature.
 
 ---
 
