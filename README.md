@@ -4,7 +4,6 @@
 
 ## Table of Contents
 - [Project Overview](#project-overview)
-- [External Libraries](#external-libraries)
 - [Public API](#public-api)
 - [Running the Code](#running-the-code)
 - [Final Note and Future Improvements](#final-note-and-future-improvements)
