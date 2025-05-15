@@ -127,15 +127,11 @@ Athletes can register for courses by filtering by academic department, the coach
 
 Select courses by entering the number shown next to each listing. Courses are added to the athlete's schedule instantly. The image of courses above shows only a small portion of the courses that will show up when using this feature.
 
----
-
-### Conflict-Free by Design
-
-Since courses were filtered using the coach-inputted schedule, the athlete currently has no conflicts.
+Additionally, since courses were filtered using the coach-inputted schedule, the athlete currently has no conflicts.
 
 ---
 
-### Demonstrating Conflict Detection
+### Conflict Detection
 
 <img src="https://github.com/user-attachments/assets/a1494585-8363-49a9-80de-789acb7fdd7b" width="550" alt="User manually adds overlapping event to test conflict" />
 
