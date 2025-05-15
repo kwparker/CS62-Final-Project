@@ -149,98 +149,99 @@ public class TeamSyncApp {
                     String decision = scannerIn.nextLine().toUpperCase();
                     if (decision.equals("Y")) { // if yes, clear schedule
                         for (Athlete athlete: coach.getAllAthletes()){ // loop through athletes
-                            // get athletic events
+                            // get athletic events for the athlete
                             ArrayList<Event> athleticEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(2));
-                            
-                            for (Event event: athleticEvents){
-                                athlete.removeEvent(event);
+                            for (Event event: athleticEvents){ // loop through the events in the athletic events list for the athlete
+                                athlete.removeEvent(event); // remove each event
                             }
                         }
 
-                        coach.getCoachSchedule().clearSchedule();
-                        defaultSchedule.clearSchedule();
-                        System.out.println("Old athletic schedule cleared.");
+                        coach.getCoachSchedule().clearSchedule(); // clear coach schedule
+                        defaultSchedule.clearSchedule(); // clear default schedule
+                        System.out.println("Old athletic schedule cleared."); 
                     }
-                    else{
+                    else{ // if not clearing
                         System.out.println("Athletic schedule not cleared.");
                     }
                 }
                 
-                String filePath = null;
-                while (filePath == null) {
-                    System.out.println("Input athletic schedule filename.csv (Part of path after 'Data/') "); // should we have a try to make sure this is valid
-                    String fileName = scannerIn.nextLine();
-                    filePath = "Data/" + fileName;
-                    if (!(new File(filePath)).exists()) {
-                        System.out.println("File not found. Please enter a valid file name");
-                        filePath = null;
+                String filePath = null; // path to the file
+                while (filePath == null) { // loop until valid file inputted
+                    System.out.println("Input athletic schedule filename.csv (Part of path after 'Data/') ");
+                    String fileName = scannerIn.nextLine(); // read filename
+                    filePath = "Data/" + fileName; // build the full path by adding Data/
+                    if (!(new File(filePath)).exists()) { // check if file exists
+                        System.out.println("File not found. Please enter a valid file name"); // error message
+                        filePath = null; // reset path
                     }
                 }
                 
-                System.out.println("Input season start date in form YYYY-MM-DD");
-                LocalDate startDate = null;
-                while (startDate == null) {
+                System.out.println("Input season start date in form YYYY-MM-DD"); // start date
+                LocalDate startDate = null; 
+                while (startDate == null) { // loop until valid date
                     String date = scannerIn.nextLine();
                     try {
-                        startDate = LocalDate.parse(date);
-                    } catch (DateTimeException e) {
+                        startDate = LocalDate.parse(date); // try parsing the date
+                    } catch (DateTimeException e) { // handle bad inputs
                         System.out.println("Invalid date. Please use YYYY-MM-DD format.");
                     } 
                 }
 
-                System.out.println("Input season end date in form YYYY-MM-DD");
+                System.out.println("Input season end date in form YYYY-MM-DD"); // end date
                 LocalDate endDate = null;
-                while (endDate == null) {
+                while (endDate == null) { // loop until valid date
                     String date = scannerIn.nextLine();
                     try {
-                        endDate = LocalDate.parse(date);
-                    } catch (DateTimeException e) {
+                        endDate = LocalDate.parse(date); // try parsing the date
+                    } catch (DateTimeException e) { // handle bad inputs
                         System.out.println("Invalid date. Please use YYYY-MM-DD format");
                     }
                 }
 
+                // generate practice schedule
                 ArrayList<Event> practiceSchedule = coach.createPracticeSchedule(filePath, startDate, endDate);
+                // loop through the events
                 for (Event event: practiceSchedule) {
-                    coach.addEventToTeam(event);
-                    this.defaultSchedule.addEvent(event);
+                    coach.addEventToTeam(event); // add to team
+                    this.defaultSchedule.addEvent(event); // add to default for new athletes
                 }
 
                 System.out.println("Athletic schedule uploaded.");
 
             }
-            else if (userChoice.equals("6")) {
-                coach.printTeamRoster();
+            else if (userChoice.equals("6")) { // chooses to view team roster
+                coach.printTeamRoster(); // print the athletes on the team roster
             }
             
-            else if (userChoice.equals("7")){
+            else if (userChoice.equals("7")) { // chooses to add a new athlete
                 System.out.println("\n*** Add a New Athlete ***");
 
                 System.out.println("Enter the athlete's name: ");
-                String name = scannerIn.nextLine();
+                String name = scannerIn.nextLine(); // read name
 
                 String username;
-                while (true) {
+                while (true) { // loop until valid username
                     System.out.println("Enter a username for the athlete: ");
                     username = scannerIn.nextLine();
-                    if (athleteMap.containsKey(username)) {
-                        System.out.println("Username already exists. Please choose a different one.");
+                    if (athleteMap.containsKey(username)) { // check if the username already exists
+                        System.out.println("Username already exists. Please choose a different one."); // prompt for a new username
                     } else {
-                        break;
+                        break; // exit loop if valid unique username
                     }
                 }
 
                 System.out.println("Enter the athlete's team: ");
-                String team = scannerIn.nextLine();
+                String team = scannerIn.nextLine(); // read the team
 
                 System.out.println("Enter the athlete's major: ");
-                String major = scannerIn.nextLine();
+                String major = scannerIn.nextLine(); // read the major
 
                 int gradYear = 0;
-                while (gradYear == 0) {
+                while (gradYear == 0) { // loop until valid year
                     System.out.println("Enter the athlete's grad year: ");
                     try {
-                        gradYear = Integer.parseInt(scannerIn.nextLine());
-                    } catch (NumberFormatException e) {
+                        gradYear = Integer.parseInt(scannerIn.nextLine()); // try parsing the grad year
+                    } catch (NumberFormatException e) { // handle bad inputs
                         System.out.println("Invalid input. Please enter a valid year.");
                     }
                 }
@@ -275,26 +276,25 @@ public class TeamSyncApp {
                 break;
             }
             
-            // if username not ffo
+            // if username not found
             System.out.println("User not found. Please enter a username to create an account.");
             String inputUser = scannerIn.nextLine(); // saves athlete username
             System.out.println("Enter your name.");
             String inputName = scannerIn.nextLine(); // saves athlete name
             System.out.println("Enter your team");
-            String inputTeam = scannerIn.nextLine();
+            String inputTeam = scannerIn.nextLine();  // saves athlete's team
             System.out.println("Enter your major");
-            String inputMajor = scannerIn.nextLine();
+            String inputMajor = scannerIn.nextLine();  // saves athlete's major
 
-            
             int inputGradYear;
 
             while (true){
                 System.out.println("Enter your grad year");
                 try {
-                    inputGradYear = scannerIn.nextInt();
+                    inputGradYear = scannerIn.nextInt();  // saves grad year
                     break;
                 }
-                catch (Exception e){
+                catch (Exception e){  // catches exception
                     System.out.println("Invalid grad year. Please enter a graduation year as an integer.");
                     scannerIn.nextLine();
                 }
@@ -304,13 +304,15 @@ public class TeamSyncApp {
             
             // Athlete createdAthlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
             athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, defaultSchedule.clone(), inputGradYear);
-            athleteMap.put(inputUser, athlete);
+            athleteMap.put(inputUser, athlete);  // adds athlete to the athleteM map
             
             System.out.println("Account created.");
         }
 
         while (true) {
-            System.out.println("\n*** Athlete Menu (" + athlete.getName() + ") ***");
+
+            // displays athlete menu
+            System.out.println("\n*** Athlete Menu (" + athlete.getName() + ") ***"); 
             System.out.println("1. View full profile and semester schedule.");
             System.out.println("2. View conflicts");
             System.out.println("3. Add event");
@@ -318,33 +320,40 @@ public class TeamSyncApp {
             System.out.println("5. Back");
             String choice = scannerIn.nextLine();
 
+            // prints athlete menu
             if (choice.equals("1")){
                 System.out.println(athlete);
                 continue;
             }
+            
+            // prints athlete conflicts
             else if (choice.equals("2")){
                 athlete.printConflicts();
                 continue;
             }
+
+            // adds events to athlete's schedule
             else if (choice.equals("3")){
-                Event event = eventFromInput();
-                athlete.addEvent(event);
+                Event event = eventFromInput();  // gets event from input
+                athlete.addEvent(event);  // adds event
                 System.out.println("Event added.");
                 continue;
             }
-            else if (choice.equals("4")) {
-                ArrayList<Event> currentAcademicEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(1));
-                int currentCourseCount = athlete.enrolledCourses.size();
 
-                if (currentCourseCount == 0){
+            // handles athlete course registration
+            else if (choice.equals("4")) {
+                ArrayList<Event> currentAcademicEvents = new ArrayList<>(athlete.getAthleteSchedule().getEventsByType(1)); // gets list of type 1 events
+                int currentCourseCount = athlete.enrolledCourses.size();  // gets current number of courses
+
+                if (currentCourseCount == 0){  // if athlete is in no courses
                     System.out.println("You currently have no academic courses.");
                 }
                 else{
-                    ArrayList<Course> enrolledCourses = athlete.getEnrolledCourses();
+                    ArrayList<Course> enrolledCourses = athlete.getEnrolledCourses(); // gets athlete's enrolled courses
                     System.out.println("Your current academic courses:");
                     int num = 1;
-                    for (Course course: enrolledCourses){
-                        System.out.println(num + ": " + course);
+                    for (Course course: enrolledCourses){  // for each course
+                        System.out.println(num + ": " + course);  // prints number and course
                         num++;
                     }
                 }
@@ -354,30 +363,41 @@ public class TeamSyncApp {
 
                 while(!validInput){
 
-                    if (currentCourseCount == 0) {
+                    if (currentCourseCount == 0) {  // if user is currently in no courses
+
+                        // prompts user with course registration options
                         System.out.println("\nWhat would you like to do?");
                         System.out.println("1. Register for academic courses");
                         System.out.println("2. Go back to the previous menu");
 
                         String input = scannerIn.nextLine();
+
+                        // moves to course registration
                         if (input.equals("1")){
                             maxCoursesToAdd = 5;
                             validInput = true;
                             break;
                         }
+
+                        // returns user to menu
                         else if (input.equals("2")){
                             System.out.println("Returning to menu.");
                             break;
                         }
+                        
+                        // handles invalid inputs
                         else{
                             System.out.println("Invalid input. Please enter 1 or 2.");
                             continue;
                         }
                     }
+
                     else{
+                        
+                        // provides option menu if athlete is in at least 1 course
                         System.out.println("\nWhat would you like to do?");
                         System.out.println("1. Clear all academic courses and register from scratch.");
-                        System.out.println("2. Edit/add to current academic schedule (5 courses max).");
+                        System.out.println("2. Add to current academic schedule (5 courses max).");
                         System.out.println("3. Go back to the previous menu.");
 
                         String modeChoice = scannerIn.nextLine();
