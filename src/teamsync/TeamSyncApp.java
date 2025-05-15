@@ -289,7 +289,7 @@ public class TeamSyncApp {
             scannerIn.nextLine();
             
             // Athlete createdAthlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, new Schedule(), inputGradYear);
-            athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, defaultSchedule, inputGradYear);
+            athlete = new Athlete(inputName, inputUser, inputTeam, inputMajor, defaultSchedule.clone(), inputGradYear);
             athleteMap.put(inputUser, athlete);
             
             System.out.println("Account created.");
@@ -450,7 +450,7 @@ public class TeamSyncApp {
 
                 if (filterChoice.equals("1")) {
 
-                    System.out.println("Input department prefix");
+                    System.out.println("Input department prefix and/or first digits of course number with no space (ex: CSCI1): ");
                     String dept = null;
                     while (dept == null){
                         dept = scannerIn.nextLine().toUpperCase();

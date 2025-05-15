@@ -156,7 +156,7 @@ public class Coach {
      * @return boolean of whether coach has conflicts
      */
     public boolean hasConflicts(){
-        return schedule.detectConflict();
+        return schedule.detectConflict(); // check if conflicts
     }
 
     /**
@@ -272,14 +272,14 @@ public class Coach {
     }
 
     /**
-     * Clears the coach's schedule
+     * clears the coach's schedule
      */
     public void clearCoachSched() {
         schedule.clearSchedule();
     }
 
     /**
-     * Prints the team roster
+     * prints the team roster
      */
     public void printTeamRoster(){
         ArrayList<Athlete> teamAthletes = getAllAthletes(); // get the athletes on the team
@@ -295,6 +295,7 @@ public class Coach {
     }
 
     /**
+     * filters the athletes by their graduation year
      * 
      * @param year graduation year of the athlete
      * @return ArrayList<Athlete> with the corresponding graduation year
@@ -329,14 +330,15 @@ public class Coach {
 
         ArrayList<Event> practiceSchedule = new ArrayList<>();  // practice schedule array list
         
-        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) { // to read in the practice file path
             String line;
             int linecounter = 0;
 
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) { // while there are still lines
                 if (linecounter != 0){
                     String[] row = line.split(",");
                     
+                    // parse each line to get event name, day of week, start and end times
                     String eventName = row[0].trim();
                     String dayOfWeekSt = row[1].trim();
                     DayOfWeek dayOfWeek = DayOfWeek.valueOf(dayOfWeekSt.toUpperCase());
@@ -346,41 +348,51 @@ public class Coach {
                     String endTimeSt = row[3].trim();
                     LocalTime endTime = LocalTime.parse(endTimeSt);
 
+                    // loop through the date range and add events on matching days
                     for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) { // goes through all the days in date interval
                         if (date.getDayOfWeek().equals(dayOfWeek)){
 
                             dateTimePair startPair = new dateTimePair(date, startTime);
                             dateTimePair endPair = new dateTimePair(date, endTime);
 
+                            // type 2 for athletic events, info left blank
                             Event athleticEvent = new Event(startPair, endPair, eventName, 2, "");
                             practiceSchedule.add(athleticEvent); // adds the date
                         }
                     }
                 }
 
-                linecounter +=1;
+                linecounter +=1; // increments the line counter
                 
             }
-        } catch (IOException e) {
+        } catch (IOException e) { // catches error if it is an invalid file inputted
             System.out.println("Invalid file.");
         }
 
-        return practiceSchedule;
+        return practiceSchedule; // return completed list of athletic schedule
     }
 
     
 
-
+    /**
+     * returns a string representation of the Coach object, including their name, team, full schedule, and a simplified view of all
+     * associated athletes.
+     *
+     * @return a formatted string containing coach and athlete information
+     */
     @Override
     public String toString(){
         StringBuilder output = new StringBuilder();
+        // append coach name and team and schedule
         output.append("\n\nCoach: " + name + "\nTeam: " + team + "\n: " + "\nSchedule:\n" + schedule + "\nAthletes:\n");
+        // append all athlete summaries
         for (String user: athletes.keySet()) {
             output.append(athletes.get(user).simpleToString());
         }
-        return output.toString();
+        return output.toString(); // return the full string
     }
 
+    // testing coach methods
     public static void main(String[] args) {
 
         // Create schedules
@@ -392,12 +404,12 @@ public class Coach {
         Athlete athlete1 = new Athlete("Tiernan", "tiernan123", "Swim", "Math", schedule1, 2026);
         Athlete athlete2 = new Athlete("Guy", "guy123", "Swim", "Physics", schedule2, 2025);
     
-        // Create map of athletes
+        // Create map of athletes, stores them with keys as username
         HashMap<String, Athlete> athleteMap = new HashMap<>();
         athleteMap.put(athlete1.getUserName(), athlete1);
         athleteMap.put(athlete2.getUserName(), athlete2);
     
-        // Create coach
+        // Create coach with the athlete map and schedule
         Coach coach = new Coach("Coach Gowdy", "coachJPG", "Swim", schedule3, athleteMap);
     
         // Create an event to add to whole team

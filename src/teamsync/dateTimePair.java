@@ -3,8 +3,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+/**
+ * Class representation of a dateTimePair
+ * 
+ * @author Kai Parker, Guy Fuchs, Tiernan Colby
+ */
 public class dateTimePair {
     
+    // instance variables
     LocalDate date;
     LocalTime time;
     

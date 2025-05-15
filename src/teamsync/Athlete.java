@@ -7,18 +7,29 @@ import java.util.ArrayList;
 /**
  * Class to represent an athlete
  * 
- * @Author Kai Parker, Guy Fuchs, Tiernan Colby
+ * @author Kai Parker, Guy Fuchs, Tiernan Colby
  */
 public class Athlete {
 
+    // fields representing basic athlete details
     String team;
     String name;
     String username;
     String major;
-    Schedule schedule;
+    Schedule schedule; // contains all events 
     int gradYear;
     ArrayList<Course> enrolledCourses;;
     
+
+    /**
+     * constructs an Athlete object with given parameters
+     * @param name      the full name of the athlete
+     * @param username  the username used to identify the athlete
+     * @param team      the name of the athletic team the athlete belongs to
+     * @param major     the athlete's major field of study
+     * @param schedule  the athlete's schedule of events
+     * @param gradYear  expected graduation year
+     */
     public Athlete(String name, String username, String team, String major, Schedule schedule, int gradYear){
         this.team = team;
         this.name = name;
@@ -26,7 +37,7 @@ public class Athlete {
         this.major = major;
         this.schedule = schedule;
         this.gradYear = gradYear;
-        enrolledCourses = new ArrayList<Course>();
+        enrolledCourses = new ArrayList<Course>(); // start with no courses
     }
 
     /**

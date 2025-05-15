@@ -4,24 +4,40 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
+/**
+ * The Schedule class manages a list of Events for an individual, either a coach or athlete.
+ * Provides functionality to add, remove, edit, detect conflicts, and retrieve events in different ways.
+ * Implements the ScheduleInterface
+ */
 public class Schedule implements ScheduleInterface {
 
     ArrayList<Event> schedule;  // arraylist of events to represent schedule
 
+    /**
+     * constructs a new empty Schedule
+     */
     public Schedule() {
         schedule = new ArrayList<Event>();
     }
 
-    // add an event to the schedule
+    /**
+     * adds an event to the schedule and automatically sorts it
+     * 
+     * @param event the event to add
+     */
     public void addEvent(Event event) {
         schedule.add(event); // add event to the schedule arrayList
         sortSchedule();  // sort the schedule
     }
 
-    // remove an event from schedule and return the event that was removed
+    /**
+     * removes an event from the schedule
+     * 
+     * @param event the event to remove
+     * @return the event if removed, or null if not found
+     */
     public Event removeEvent(Event event) {
-        boolean removed = schedule.remove(event); // check if there is an event to be returned
+        boolean removed = schedule.remove(event); // check if there is an event to be returned / removed
         if (removed){
             return event;
         }
@@ -30,19 +46,31 @@ public class Schedule implements ScheduleInterface {
         return null;
     }
     
-    // check if schedule is empty
+    /**
+     * checks if the schedule is empty
+     * 
+     * @return true if empty, false otherwise
+     */
     public boolean isEmpty() {
         return schedule.isEmpty(); 
     }
 
-    // return number of events in schedule
+    /**
+     * returns the number of events currently in the schedule
+     * 
+     * @return the number of scheduled events
+     */
     public int size() {
         return schedule.size();
     }
 
-
-    public ArrayList<ArrayList<Event>> getConflicts() {  // how will this method work if there are 3 events that all conflict with each other?
-        sortSchedule(); // sort schedule
+    /**
+     * returns a list of all conflicting event pairs in the schedule
+     * 
+     * @return list of ArrayLists, each containing two overlapping events
+     */
+    public ArrayList<ArrayList<Event>> getConflicts() {
+        sortSchedule(); // sort schedule to make sure events are in order
         ArrayList<ArrayList<Event>> conflicts = new ArrayList<>();
     
         // compare each event with all events that start later due to initially sorting the schedule
@@ -53,6 +81,7 @@ public class Schedule implements ScheduleInterface {
             for (int j = i + 1; j < schedule.size(); j++){
                 Event later = schedule.get(j);
                 
+                // if there is an overlap, store the pair
                 if (current.detectOverlap(later)) {
                     ArrayList<Event> tempList = new ArrayList<Event>();
                     tempList.add(current);
@@ -62,7 +91,7 @@ public class Schedule implements ScheduleInterface {
             }
         }
 
-        return conflicts;
+        return conflicts; // return the list of ArrayLists, each containing two overlapping events
     }
 
 

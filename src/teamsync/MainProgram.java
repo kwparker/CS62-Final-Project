@@ -1,31 +1,19 @@
 package teamsync;
 
+/**
+ * starting point for the TeamSync scheduling application
+ * 
+ * This class simply initializes the TeamSyncApp and runs the main program logic
+ * 
+ * @author: Guy Fuchs, Kai Parker, Tiernen Colby
+ */
 public class MainProgram{
 
+    // main method that launches the TeamSync program
     public static void main(String[] args){
+        // create an instance of the main program logic
         TeamSyncApp app = new TeamSyncApp();
+        // start the program
         app.runProgram();
     }
 }
-
-
-// make hash map for valid teams and when team name is inputted, adds athlete to team or creates new team
-
-// need to be able to escape course registration
-
-// if there are no courses enrolled in, don't show option to clear schedule, should only be like
-
-
-
-// add option to filter courses by 
-
-// should we check that end time is after start time?
-
-// we can't have multiday events
-
-
-
-
-
-
-
