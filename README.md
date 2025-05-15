@@ -1,6 +1,6 @@
 # CS62-Final-Project: TeamSync
-## Project Overiew
-> This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number. 
+## Project Overview
+>This program was built to help student-athletes manage their schedules by combining academic and athletic commitments into one system. We created a program that allows users to build schedules with academic and athletic events, detect conflicts, and filter courses based on department and number. The program includes a role-based access system so coaches can view their athletes’ schedules. The program supports both student-athletes and coaches. It allows coaches to view their and their athlete’s schedules, add events to the team and to individuals, add athletes, and more. Student-athletes can register for courses, view their profile and schedule, view conflicts, and add events. Users are connected to their practice schedule based on the athletic schedule that the coach uploaded. Using data from Fall 2024 courses at the Claremont College, courses are filtered by athletic schedule and users are able to filter by department and course number.
 
 ### External Libraries
 We did rely on external libraries for the development of this program.
@@ -78,6 +78,98 @@ Below is a summary of some of the public methods and constructors for the major 
 
 ---
 ## Running the code
-<img width="111" alt="PNG image" src="https://github.com/user-attachments/assets/08c6643c-cfb5-4f24-a640-f11883ed6eef" /> Run MainProgram to see this starting menu.
+
+### Launching the Program
+
+<img src="https://github.com/user-attachments/assets/08c6643c-cfb5-4f24-a640-f11883ed6eef" width="200" alt="Main menu with user role options" />
+
+Run `MainProgram` to launch the TeamSync application. You'll be prompted to log in as a Coach or Athlete.
+
+---
+
+### Logging in as the Coach
+
+<img src="https://github.com/user-attachments/assets/8e750c93-14e1-4e27-a841-a79a67bab87d" width="400" alt="Coach menu options" />
+
+The coach can manage schedules, view conflicts, add athletes, and input an athletic practice schedule.
+
+---
+
+### Uploading a Practice Schedule
+
+<img src="https://github.com/user-attachments/assets/8e529894-4c17-44b6-9827-a738bf3feb57" width="600" alt="Practice schedule input and confirmation" />
+
+After inputting the sample practice schedule file from the `Data/` folder and specifying the dates, the practice events are added to every athlete's schedule. 
+
+---
+
+### Switching to Athlete Login
+
+<img src="https://github.com/user-attachments/assets/60ea2509-7898-474f-aab1-cac05e562cdf" width="500" alt="Athlete registration prompt" />
+
+If the username is not found, you'll be prompted to create an account. This registers the user and adds them to the coach's list of athletes. This shows the role-based access feature.
+
+---
+
+### Course Registration with Filtering
+
+<img src="https://github.com/user-attachments/assets/a1868b92-34fd-4193-aab8-24fa9f44c445" width="600" alt="Course filter options" />
+
+
+Athletes can register for courses by filtering by academic department, the coach-inputted athletic schedule, or both. In this case, the athlete filters by both. This allows for the viewing of classes based on input parameters.
+
+---
+
+### Adding Courses to Schedule
+
+<img src="https://github.com/user-attachments/assets/051638b0-8737-4b99-b8d5-e9410c79afe8" width="700" alt="Course list displayed for registration" />
+<img src="https://github.com/user-attachments/assets/23eb59c9-be72-4052-896c-a29705a16c66" width="650" alt="Courses successfully added" />
+
+Select courses by entering the number shown next to each listing. Courses are added to the athlete's schedule instantly. The image of courses above shows only a small portion of the courses that will show up when using this feature.
+
+Additionally, since courses were filtered using the coach-inputted schedule, the athlete currently has no conflicts.
+
+---
+
+### Conflict Detection
+
+<img src="https://github.com/user-attachments/assets/a1494585-8363-49a9-80de-789acb7fdd7b" width="550" alt="User manually adds overlapping event to test conflict" />
+
+An athlete adds a new event that overlaps with a class. The program is able to detect this conflict, demonstrating our conflict-detection feature alongside our adding event feature, which both the athlete and coach can do.
+
+---
+
+### Viewing Athlete Profile
+
+<img src="https://github.com/user-attachments/assets/44320d26-5197-45dd-bfa2-ac6e919c68bb" width="600" alt="Athlete profile and full semester schedule" />
+
+The athlete can view their full profile and semester schedule. The image cuts off part of the athlete's schedule for the whole semester.
+
+---
+
+### Coach View of Athlete Conflicts
+
+<img src="https://github.com/user-attachments/assets/33fa7115-514a-4107-97de-8d3e84055ba4" width="550" alt="Coach menu displaying athlete conflicts" />
+
+The coach can view all team conflicts. In this example, only "Guy" has a conflict, while the auto-added "athlete1" does not.
+
+---
+
+### Additional Features
+
+- Coaches can view the athlete roster
+- You can experiment with adding/removing events, filtering courses, or printing team data
+
+---
+
+### Final Note and Future Improvements
+
+In the future, we want to expand this program to allow for multiple teams or even universities. Additionally, there are many methods written in the source code that were not used when writing the main program. These additional methods would allow for a more extensive application and provide many additional features for the users. Some of these methods include, but are not limited to, a coach adding an event to a single athlete's schedule and removing an event from a schedule.
+
+For now though, we hope you enjoy what we have built. Have fun navigating TeamSync!
+
+
+### Authors
+Kai Parker, Guy Fuchs, and Tiernan Colby
 
 
