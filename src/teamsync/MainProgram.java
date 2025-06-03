@@ -1,4 +1,4 @@
-package teamsync;
+package src.teamsync;
 
 /**
  * starting point for the TeamSync scheduling application

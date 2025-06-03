@@ -1,4 +1,4 @@
-package teamsync;
+package src.teamsync;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

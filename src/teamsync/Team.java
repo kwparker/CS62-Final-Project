@@ -1,4 +1,4 @@
-package teamsync;
+package src.teamsync;
 
 import java.util.ArrayList;
 import java.util.HashMap;
