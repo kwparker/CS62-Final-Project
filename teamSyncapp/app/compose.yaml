@@ -6,4 +6,4 @@ services:
       - 'POSTGRES_PASSWORD=teamSyncPass'
       - 'POSTGRES_USER=teamSyncUser'
     ports:
-      - '5432'
+      - '5420'
