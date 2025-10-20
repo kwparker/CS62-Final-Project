@@ -1,9 +1,16 @@
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: teamsync-postgres
     environment:
       - 'POSTGRES_DB=teamSync-db'
       - 'POSTGRES_PASSWORD=teamSyncPass'
       - 'POSTGRES_USER=teamSyncUser'
     ports:
-      - '5420'
+      - '5432:5432'
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
