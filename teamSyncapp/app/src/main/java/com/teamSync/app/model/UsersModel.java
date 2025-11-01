@@ -1,5 +1,7 @@
 package com.teamSync.app.model;
 import jakarta.persistence.*;
+import com.teamSync.app.model.Role;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -9,22 +11,43 @@ public class UsersModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String role;
-    private String first_name;
-    private String last_name;
-    private int year;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.ROLEATHLETE;
+
+    private String firstname;
+    private String lastname;
+
+    @Column(unique = true, nullable = false)
     private String email;
-    private String password_hash;
+
+    private String passwordhash;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     // Default constructor required by JPA
     public UsersModel() {}
 
-    public UsersModel(String first_name, String last_name, int year, String email, String password_hash) {
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.year = year;
+    public UsersModel(String firstname, String lastname, String email, String passwordhash, Role role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
-        this.password_hash = password_hash;
+        this.passwordhash = passwordhash;
+        this.role = role;
+    }
+
+     @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Getters and setters
@@ -37,36 +60,28 @@ public class UsersModel {
         this.id = id;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
     public String getFirstName() {
-        return first_name;
+        return firstname;
     }
 
-    public void setFirstName(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getLastName() {
-        return last_name;
+        return lastname;
     }
 
-    public void setLastName(String last_name) {
-        this.last_name = last_name;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -78,24 +93,32 @@ public class UsersModel {
     }
 
     public String getPasswordHash() {
-        return password_hash;
+        return passwordhash;
     }
 
-    public void setPasswordHash(String password_hash) {
-        this.password_hash = password_hash;
+    public void setPasswordHash(String passwordhash) {
+        this.passwordhash = passwordhash;
     }
 
+    public LocalDateTime getCreatedAt() {
+      return createdAt; 
+    }
+
+    public LocalDateTime getUpdatedAt() { 
+      return updatedAt; 
+    }
     
     @Override
     public String toString() {
         return "UsersModel [" +
               "id=" + id +
               ", role=" + role +
-              ", first_name=" + first_name +
-              ", last_name=" + last_name +
-              ", year=" + year +
+              ", first_name=" + firstname +
+              ", last_name=" + lastname +
               ", email=" + email +
-              ", password_hash=" + password_hash +
+              ", password_hash=" + passwordhash +
+              ", updatedAt=" + updatedAt +
+              ",createdAt=" + createdAt +
               "]";
     }
 
