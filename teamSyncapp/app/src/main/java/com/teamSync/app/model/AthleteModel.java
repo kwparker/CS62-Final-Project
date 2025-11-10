@@ -1,7 +1,7 @@
 package com.teamSync.app.model;
 import jakarta.persistence.*;
 import com.teamSync.app.model.Year;
-import com.teamSync.app.model.UserModel;
+import com.teamSync.app.model.UsersModel;
 
 @Entity
 @Table(name = "athletes")
@@ -11,9 +11,8 @@ public class AthleteModel {
   private Long id;
 
   @OneToOne
-  @MapsId
   @JoinColumn(name = "id")
-  private UserModel user;
+  private UsersModel user;
 
   private String team;
   private String major;
@@ -38,11 +37,11 @@ public class AthleteModel {
     this.id = id;
   }
 
-  public UserModel getUser() {
+  public UsersModel getUser() {
     return user;
   }
 
-  public void setUser(UserModel user) {
+  public void setUser(UsersModel user) {
     this.user = user;
   }
 
