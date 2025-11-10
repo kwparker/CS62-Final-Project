@@ -1,4 +1,4 @@
-package com.teamSync.app.config;
+package com.teamSync.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
